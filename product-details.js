@@ -34,3 +34,6 @@ function render(id){selected=data.find(p=>p.id===id)||data[0];filter=selected.br
 export function openProduct(id='scott-0'){trigger=document.activeElement;render(id);if(!modal.open)modal.showModal();}
 $('#productClose').onclick=()=>modal.close();modal.addEventListener('close',()=>trigger?.focus?.());modal.onclick=e=>{if(e.target===modal)modal.close()};modal.querySelectorAll('[data-brand]').forEach(b=>b.onclick=()=>render(data.find(p=>p.brand===b.dataset.brand).id));for(const[id,dir]of[['productPrevious',-1],['productNext',1]])$('#'+id).onclick=()=>{const list=data.filter(p=>p.brand===filter),i=list.indexOf(selected);render(list[(i+dir+list.length)%list.length].id)};
 const launcher=document.createElement('button');launcher.id='productLauncher';launcher.innerHTML='<span>⬡</span> 제품 인벤토리 <small>화장품을 눌러 스캔하기</small>';launcher.hidden=true;launcher.onclick=()=>openProduct();document.body.append(launcher);
+// Exhibition QR: ?product=brioll|scott (or a product id) opens that detail once the intro has finished.
+const qr=new URLSearchParams(location.search).get('product'),qrId=({brioll:'brioll-1',scott:'scott-0'})[qr]||(data.some(p=>p.id===qr)?qr:null);
+if(qrId)document.addEventListener('intro:entered',()=>openProduct(qrId),{once:true});

@@ -70,3 +70,11 @@ body:before{content:'';position:fixed;inset:0 0 auto;height:195px;background:lin
 .stops{border-radius:0;border:0;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}.stops button,.stop-icon{border-radius:2px}
 .autotour{border-radius:999px}.hotspot{border-radius:999px}.hotspot .hot-index{border-radius:50%}
 .view-label{border-radius:0;border-left:2px solid #d4f45b99}
+
+/* 입사지원서 링크: 헤더는 HUD와 겹치지 않는 넓은 화면에서만, 보상 위젯에는 항상 */
+@media(max-width:1100px){header a.quiet{display:none}}
+.reward-apply{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;padding:9px 11px;font-size:10px;font-weight:600;color:#1a1c12;background:var(--lime);text-decoration:none;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}.reward-apply:hover{background:#e6ff6c}
+
+/* 가장자리 육각 벌집 패턴 (입사지원서 배경과 같은 타일) — 가운데는 비우고 테두리 쪽만 */
+.vignette::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cpath d='M28 1 L55 16.5 L55 47.5 L28 63 L1 47.5 L1 16.5 Z M28 63 L28 97' fill='none' stroke='%23ffffff' stroke-opacity='.09'/%3E%3C/svg%3E");background-position:center;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 50%,transparent 55%,#000 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 50%,transparent 55%,#000 100%)}
+.vignette::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 0% 100%,#d9f64c0d,transparent 70%),radial-gradient(ellipse 50% 45% at 100% 0%,#d9f64c0a,transparent 70%)}
