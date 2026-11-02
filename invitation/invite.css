@@ -157,7 +157,14 @@ ol,ul{list-style:none}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(223,255,0,.7)}70%,100%{box-shadow:0 0 0 calc(14 * var(--u)) rgba(223,255,0,0)}}
 .work--hwansang.in .work-tap{animation-name:ping2}
 @keyframes ping2{0%{box-shadow:0 0 0 0 rgba(220,98,204,.7)}70%,100%{box-shadow:0 0 0 calc(14 * var(--u)) rgba(220,98,204,0)}}
-.works-hint{font:400 calc(11 * var(--u))/1.6 var(--f-kr);color:#777;text-align:center;margin-top:calc(14 * var(--u))}
+.works-hint{display:flex;align-items:center;gap:calc(8 * var(--u));width:fit-content;margin:calc(18 * var(--u)) auto 0;padding:calc(8 * var(--u)) calc(14 * var(--u));background:#191919;color:#fff;font:500 calc(11.5 * var(--u))/1.4 var(--f-kr);border-radius:999px}
+.works-hint i{width:calc(7 * var(--u));height:calc(7 * var(--u));border-radius:50%;background:var(--lime);animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.2}}
+.work-cursor{position:absolute;left:calc(118 * var(--u));top:calc(150 * var(--u));width:calc(34 * var(--u));height:auto;z-index:3;pointer-events:none;opacity:0;filter:drop-shadow(0 calc(2 * var(--u)) calc(3 * var(--u)) rgba(0,0,0,.35))}
+.work.in .work-cursor{opacity:1;animation:tapHand 2.4s ease-in-out infinite 1.6s}
+@keyframes tapHand{0%,100%{transform:translate(calc(14 * var(--u)),calc(18 * var(--u)))}35%{transform:translate(0,0)}45%{transform:translate(0,0) scale(.86)}55%{transform:translate(0,0)}}
+.work--eternia.in .work-img{animation:sway 5.5s ease-in-out infinite,cardPress 2.4s ease-in-out infinite 1.6s}
+@keyframes cardPress{0%,40%,60%,100%{scale:1}47%{scale:.965}}
 
 /* ================= INVITATION ================= */
 .invite{position:relative;background:#fff;padding:calc(85 * var(--u)) calc(20 * var(--u)) 0}
@@ -244,7 +251,10 @@ ol,ul{list-style:none}
 .day--open{background:var(--lime)}
 .day--open .dl{font-size:calc(9 * var(--u));color:#191919}
 .day--open .dl em{font-style:normal;font-size:calc(13 * var(--u));line-height:1}
-.days.in .day--open{animation:openGlow 2.2s ease-in-out infinite 1.4s}
+.days.in .day{animation:dayWave 2.6s ease-in-out infinite;animation-delay:calc(1.2s + var(--i) * 180ms)}
+.days.in .day--open{animation-name:dayWaveGlow}
+@keyframes dayWave{0%,60%,100%{transform:none}20%{transform:translateY(calc(-9 * var(--u)))}40%{transform:translateY(calc(2 * var(--u)))}}
+@keyframes dayWaveGlow{0%,60%,100%{transform:none;box-shadow:0 0 0 0 rgba(223,255,0,0)}20%{transform:translateY(calc(-9 * var(--u)));box-shadow:0 calc(6 * var(--u)) 0 0 rgba(223,255,0,.35)}40%{transform:translateY(calc(2 * var(--u)))}}
 @keyframes openGlow{0%,100%{box-shadow:0 0 0 0 rgba(223,255,0,0);transform:none}50%{box-shadow:0 0 0 calc(5 * var(--u)) rgba(223,255,0,.45);transform:translateY(calc(-3 * var(--u)))}}
 .sched-note{padding-top:calc(15 * var(--u));font:400 calc(12 * var(--u))/calc(19.8 * var(--u)) var(--f-kr);color:#62625b}
 .sched-note2{padding-top:calc(6 * var(--u));font:400 calc(11 * var(--u))/calc(18.15 * var(--u)) var(--f-kr);color:#62625b}

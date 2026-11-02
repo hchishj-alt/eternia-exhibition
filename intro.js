@@ -11,7 +11,7 @@ document.querySelector('#introSound').onclick=()=>{video.muted=!video.muted;docu
 // The logo video itself is silent; audio-ui.js starts the BGM + logo sting and then fires 'intro:play'.
 // If the browser blocks sound until a click, audio-ui.js shows the 시작하기 button first.
 video.muted=true;const playButton=document.querySelector('#introPlay');let introStarted=false;
-function playIntro(){if(videoDone)return;introStarted=true;playButton.hidden=true;video.play().catch(()=>playButton.hidden=false)}
+function playIntro(){if(videoDone)return;introStarted=true;playButton.hidden=true;video.play().catch(showLoading)}
 document.addEventListener('intro:play',playIntro);playButton.onclick=()=>{video.play().then(()=>{introStarted=true;playButton.hidden=true}).catch(showLoading)};
 setTimeout(()=>{if(!introStarted&&playButton.hidden)playIntro()},2500);
 document.addEventListener('tour:load',e=>{realProgress=Math.round(e.detail.loaded/e.detail.total*100);text.textContent=`전시 리소스 ${e.detail.loaded} / ${e.detail.total}`;});

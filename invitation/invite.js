@@ -181,7 +181,7 @@
     const g = c.getContext('2d');
     try { await Promise.all(['700 112px "Space Grotesk"', '500 14px "Space Grotesk"', '400 20px Audiowide', '700 20px "Noto Sans KR"', '500 20px "Noto Sans KR"', '400 20px "Noto Sans KR"'].map(f => document.fonts.load(f, 'A가'))); } catch (e) {}
     const [plate, person, shadow, smoke, cloud, logo] = await Promise.all(
-      ['hero-plate.jpg', 'hero-person.webp', 'hero-shadow.png', 'hero-smoke.webp', 'cloud.png', 'logo-mark.png'].map(n => loadImg('assets/' + n)));
+      ['hero-plate.jpg', 'hero-person.webp', 'hero-shadow.png', 'hero-smoke.webp', 'cloud.webp', 'logo-mark.png'].map(n => loadImg('assets/' + n)));
     const U = v => v * s;
     // spaced text helper (letter-spacing in design px), align: left/right
     function text(str, x, y, font, color, ls = 0, align = 'left', alpha = 1) {

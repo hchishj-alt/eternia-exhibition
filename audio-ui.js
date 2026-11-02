@@ -13,7 +13,7 @@ function rewardChime(){if(!enabled||!ctx||ctx.state!=='running')return;const t=c
 const rewardDialog=document.querySelector('#rewardDialog');new MutationObserver(()=>{if(rewardDialog.open)rewardChime()}).observe(rewardDialog,{attributes:true,attributeFilter:['open']});
 function playBgm(){if(enabled)return bgm.play();return Promise.resolve()}
 // Starts the logo animation; with sound on it first checks that audio is allowed.
-function beginIntro(){const go=()=>document.dispatchEvent(new Event('intro:play'));bgm.pause();bgm.currentTime=0;if(!enabled){go();return}playBgm().then(()=>{unlocked=true;logoSting();go()}).catch(()=>{introPlay.innerHTML='시작하기 ▷';introPlay.hidden=false})}
+function beginIntro(){const go=()=>document.dispatchEvent(new Event('intro:play'));bgm.pause();bgm.currentTime=0;if(!enabled){go();return}playBgm().then(()=>{unlocked=true;logoSting();go()}).catch(()=>go())}
 introPlay.addEventListener('click',()=>{unlocked=true;playBgm().catch(()=>{});logoSting()});
 function unlock(e){if(unlocked)return;unlocked=true;if(e.target.closest?.('#soundToggle'))skipToggle=true;ctx?.resume().catch(()=>{});playBgm().catch(()=>{})}
 ['pointerdown','keydown','touchstart'].forEach(type=>window.addEventListener(type,unlock,{capture:true,passive:true}));

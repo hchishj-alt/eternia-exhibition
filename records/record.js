@@ -67,21 +67,24 @@
     Object.keys(pos).forEach(function (k) { btn.style[k] = pos[k]; });
     (opt.parent || document.body).appendChild(btn);
     var countEl = btn.querySelector('b');
-    var key = 'grad_heart_' + site;
+    var key = 'grad_heart_' + site, mineKey = 'grad_hearts_' + site;
     var liked = store.get(key) === '1';
-    var base = null;
-    function render() { btn.classList.toggle('on', liked); countEl.textContent = base == null ? (liked ? '1' : '') : String(base); }
+    var mine = parseInt(store.get(mineKey) || '0', 10) || 0;   // 이 브라우저에서 누른 횟수
+    var base = null, pending = 0, timer = null;
+    function render() { btn.classList.toggle('on', liked); countEl.textContent = base == null ? (mine ? String(mine) : '') : String(base + pending); }
     render();
     onStats(function (s) { if (s.counts && s.counts[site]) { base = s.counts[site].heart; render(); } });
+    function flush() { timer = null; if (!pending) return; var n = pending; pending = 0; if (base != null) base += n; event(site, 'heart', String(n)); }
     btn.addEventListener('click', function () {
       burst(btn);
       btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
-      if (liked) return;            // 방문자당 한 번만 집계
+      // 누르는 만큼 모두 집계 (연타는 0.8초 묶어서 한 번에 전송)
       liked = true; store.set(key, '1');
-      if (base != null) base++;
-      render();
-      event(site, 'heart', opt.target || site);
+      mine++; store.set(mineKey, String(mine));
+      pending++; render();
+      clearTimeout(timer); timer = setTimeout(flush, 800);
     });
+    addEventListener('pagehide', flush);
     return btn;
   }
   function burst(el) {

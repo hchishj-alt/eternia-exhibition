@@ -81,7 +81,7 @@ function stats_() {
   var counts = {};
   SITES.forEach(function (s) { counts[s] = {}; ACTIONS.forEach(function (a) { counts[s][a] = 0; }); });
   var rows = sheet_('event').getDataRange().getValues().slice(1);
-  rows.forEach(function (r) { var s = r[1], a = r[2]; if (counts[s] && counts[s][a] !== undefined) counts[s][a]++; });
+  rows.forEach(function (r) { var s = r[1], a = r[2]; if (counts[s] && counts[s][a] !== undefined) counts[s][a] += (a === 'heart' ? Math.max(1, Math.min(50, parseInt(r[3], 10) || 1)) : 1); });
   return {
     counts: counts,
     guestbook: Math.max(0, sheet_('guestbook').getLastRow() - 1),
