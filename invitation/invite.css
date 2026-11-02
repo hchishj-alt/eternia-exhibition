@@ -439,3 +439,6 @@ body.viewer-open{overflow:hidden}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;transition-delay:0s!important}
 }
+
+/* tiny homage credit */
+.credit{position:relative;z-index:3;margin-top:calc(12 * var(--u));font:400 8px/1.5 var(--f-kr);letter-spacing:-.1px;color:rgba(34,34,34,.4);word-break:keep-all}
