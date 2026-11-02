@@ -268,24 +268,8 @@
   const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const entryHtml = g => `<li><p class="gl-msg">${esc(g.message)}</p><p class="gl-meta"><b>${esc(g.name)}</b><span>${esc(g.time || '방금')}</span></p></li>`;
   if (R.queued) R.queued().forEach(g => gList.insertAdjacentHTML('afterbegin', entryHtml({ name: g.name, message: g.message, time: '방금' })));
-  if (R.configured) {
-    gStatus.textContent = '따뜻한 한마디를 남겨주세요. 남긴 글은 아래에 바로 보여요.';
-    let shown = '';
-    const paint = res => {
-      if (!res || !res.guestbook) return;
-      // 방금 내가 남긴 글은 시트 반영을 기다리지 않고 바로 보이게
-      let mine = []; try { mine = JSON.parse(localStorage.getItem('grad_gb_mine') || '[]'); } catch (e) {}
-      mine = mine.filter(m => Date.now() - m.at < 15 * 60 * 1000 && !res.guestbook.some(g => g.name === m.name && g.message === m.message));
-      const list = mine.reverse().map(m => ({ name: m.name, message: m.message, time: '방금' })).concat(res.guestbook);
-      const key = list.map(g => g.name + '|' + g.message).join('\n');
-      if (key === shown) return;
-      const before = new Set(shown ? shown.split('\n') : []); shown = key;
-      gList.innerHTML = list.map(entryHtml).join('');
-      if (before.size) [...gList.children].forEach((li, i) => { const g = list[i]; if (!before.has(g.name + '|' + g.message)) li.classList.add('new'); });
-    };
-    R.load().then(paint);
-    if (R.watch) R.watch(paint, 12000);
-  }
+  // 메시지는 하진에게만 전달: 다른 사람 글은 보여 주지 않고, 이 기기에서 보낸 글만 표시
+  try { JSON.parse(localStorage.getItem('grad_gb_sent') || '[]').slice(-5).forEach(g => gList.insertAdjacentHTML('afterbegin', entryHtml({ name: g.name, message: g.message, time: '보냄' }))); } catch (e) {}
   $('#guestForm').addEventListener('submit', async e => {
     e.preventDefault();
     const shake = () => { gStatus.classList.remove('shake'); void gStatus.offsetWidth; gStatus.classList.add('shake'); };
@@ -296,15 +280,15 @@
     const res = await R.guestbook(name, msg, 'invitation');
     btn.disabled = false;
     if (res && res.ok) {
-      try { const mine = JSON.parse(localStorage.getItem('grad_gb_mine') || '[]'); mine.push({ name, message: msg, at: Date.now() }); localStorage.setItem('grad_gb_mine', JSON.stringify(mine.slice(-5))); } catch (e) {}
-      gList.insertAdjacentHTML('afterbegin', entryHtml({ name, message: msg, time: '방금' }));
+      try { const sent = JSON.parse(localStorage.getItem('grad_gb_sent') || '[]'); sent.push({ name, message: msg }); localStorage.setItem('grad_gb_sent', JSON.stringify(sent.slice(-5))); } catch (e) {}
+      gList.insertAdjacentHTML('afterbegin', entryHtml({ name, message: msg, time: '보냄' }));
       gList.firstElementChild.classList.add('new');
       $('#gMsg').value = '';
-      gStatus.textContent = '고마워요! 방명록에 남겨졌어요.';
+      gStatus.textContent = '고마워요! 하진에게 마음이 전해졌어요.';
     } else if (res && (res.error === 'not_configured' || res.error === 'network') && R.queueGuestbook) {
       // 서버가 아직 연결 전이거나 잠깐 끊겼을 때: 이 브라우저에 보관했다가 연결되면 자동 전송
       R.queueGuestbook(name, msg, 'invitation');
-      gList.insertAdjacentHTML('afterbegin', entryHtml({ name, message: msg, time: '방금' }));
+      gList.insertAdjacentHTML('afterbegin', entryHtml({ name, message: msg, time: '보냄' }));
       gList.firstElementChild.classList.add('new');
       $('#gMsg').value = '';
       gStatus.textContent = '고마워요! 마음이 전해졌어요.';
