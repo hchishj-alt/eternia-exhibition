@@ -271,7 +271,7 @@ ol,ul{list-style:none}
   60%{transform:translate(0,0) scale(1)}
   85%{transform:translate(0,0);opacity:1}
 }
-.poster-row{display:flex;gap:8px;margin-top:25px;padding-top:18px;border-top:1PX solid rgba(34,34,34,.27)}
+.insta-link{display:block;width:fit-content;margin-top:26px;font:400 12px/1.6 var(--f-kr);color:#555;text-decoration:underline;text-underline-offset:3PX}
 .poster{margin-top:25px}
 .poster summary{list-style:none;display:flex;align-items:center;height:44px;border-bottom:1PX solid rgba(34,34,34,.27);font:400 13px/21.45px var(--f-kr);cursor:pointer}
 .poster summary::-webkit-details-marker{display:none}

@@ -172,19 +172,6 @@
   lb.addEventListener('click', e => { if (e.target === lb || e.target === lbBody) closeLightbox(); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLightbox(); });
 
-  /* 꼬두라미 포스터: invitation/assets/poster.jpg 가 있으면 보여주고, 없으면 인스타로 안내 */
-  const POSTER = 'assets/poster.jpg';
-  $('#posterBtn').addEventListener('click', () => {
-    const img = new Image();
-    img.alt = '[꼬두라미] 졸업 전시회 포스터';
-    img.onload = () => openLightbox('꼬두라미 포스터', [img, Object.assign(document.createElement('a'), { className: 'lb-hint', href: INSTA, target: '_blank', rel: 'noopener', textContent: '인스타그램에서 보기 ↗' })], POSTER, '꼬두라미_포스터.jpg');
-    img.onerror = () => {
-      const m = document.createElement('div'); m.className = 'lb-msg';
-      m.innerHTML = '포스터 이미지는 인스타그램 게시물에서 볼 수 있어요.<br><a href="' + INSTA + '" target="_blank" rel="noopener">인스타그램에서 포스터 보기 ↗</a>';
-      openLightbox('꼬두라미 포스터', m);
-    };
-    img.src = POSTER;
-  });
 
   /* ---------- 초대장 PNG: 메인 화면 느낌으로 1080×1920 카드를 직접 그림 ---------- */
   const loadImg = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
@@ -270,7 +257,6 @@
   $('#shareLink').addEventListener('click', () => ev('share', 'link'));
   $('#saveCal').addEventListener('click', () => ev('calendar', 'ics'));
   $('#savePng').addEventListener('click', () => ev('download', 'invitation_png'));
-  $('#posterBtn').addEventListener('click', () => ev('poster', 'kkodurami'));
   $('#instaLink').addEventListener('click', () => ev('instagram', 'post'));
   $('#copyAddr').addEventListener('click', () => ev('copy_address', 'address'));
   $$('.map-btn[href]').forEach(a => a.addEventListener('click', () => ev('map', a.textContent.replace(' ↗', '').trim())));
