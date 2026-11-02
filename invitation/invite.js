@@ -267,6 +267,7 @@
   const gStatus = $('#guestStatus'), gList = $('#guestList');
   const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const entryHtml = g => `<li><p class="gl-msg">${esc(g.message)}</p><p class="gl-meta"><b>${esc(g.name)}</b><span>${esc(g.time || '방금')}</span></p></li>`;
+  if (R.queued) R.queued().forEach(g => gList.insertAdjacentHTML('afterbegin', entryHtml({ name: g.name, message: g.message, time: '방금' })));
   if (R.configured) {
     gStatus.textContent = '따뜻한 한마디를 남겨주세요. 남긴 글은 아래에 바로 보여요.';
     R.load().then(res => { if (res && res.guestbook) gList.innerHTML = res.guestbook.map(entryHtml).join(''); });
@@ -274,7 +275,6 @@
   $('#guestForm').addEventListener('submit', async e => {
     e.preventDefault();
     const shake = () => { gStatus.classList.remove('shake'); void gStatus.offsetWidth; gStatus.classList.add('shake'); };
-    if (!R.configured) { shake(); return; }
     const name = $('#gName').value.trim(), msg = $('#gMsg').value.trim();
     if (!name || !msg) { gStatus.textContent = '이름과 메시지를 모두 적어 주세요.'; shake(); return; }
     const btn = e.submitter || $('#guestForm button'); btn.disabled = true;
@@ -286,6 +286,13 @@
       gList.firstElementChild.classList.add('new');
       $('#gMsg').value = '';
       gStatus.textContent = '고마워요! 방명록에 남겨졌어요.';
+    } else if (res && (res.error === 'not_configured' || res.error === 'network') && R.queueGuestbook) {
+      // 서버가 아직 연결 전이거나 잠깐 끊겼을 때: 이 브라우저에 보관했다가 연결되면 자동 전송
+      R.queueGuestbook(name, msg, 'invitation');
+      gList.insertAdjacentHTML('afterbegin', entryHtml({ name, message: msg, time: '방금' }));
+      gList.firstElementChild.classList.add('new');
+      $('#gMsg').value = '';
+      gStatus.textContent = '고마워요! 마음이 전해졌어요.';
     } else { gStatus.textContent = '저장하지 못했어요. 잠시 후 다시 시도해 주세요.'; shake(); }
   });
 })();
@@ -308,4 +315,38 @@
   update();
   window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true});
   window.addEventListener('resize',update);
+})();
+
+/* works: cursor wanders between the two cards and taps them at random */
+(function(){
+  var row=document.querySelector('.works-row'), cur=row&&row.querySelector('.work-cursor');
+  if(!row||!cur) return;
+  var cards=[].slice.call(row.querySelectorAll('.work')), running=false, x=0, y=0, last=-1;
+  var rnd=function(a,b){return a+Math.random()*(b-a);};
+  function place(nx,ny,tap){ x=nx; y=ny; cur.style.transform='translate('+x+'px,'+y+'px)'+(tap?' scale(.84)':''); }
+  function wait(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+  async function loop(){
+    var rr=row.getBoundingClientRect();
+    place(rr.width*.5, rr.height*.75);
+    await wait(400); cur.classList.add('on');
+    while(true){
+      // mostly alternate, sometimes stay on the same card
+      var i = last<0 ? (Math.random()<.5?0:1) : (Math.random()<.7 ? 1-last : last); last=i;
+      var c=cards[i], b=c.getBoundingClientRect(); rr=row.getBoundingClientRect();
+      var tx=b.left-rr.left+b.width*rnd(.28,.72), ty=b.top-rr.top+b.height*rnd(.3,.75);
+      cur.classList.remove('tap'); place(tx,ty);
+      await wait(rnd(900,1200));
+      var taps = Math.random()<.25 ? 2 : 1;
+      for(var t=0;t<taps;t++){
+        cur.classList.add('tap'); place(x,y,true); c.classList.add('pressed');
+        await wait(140);
+        place(x,y,false); c.classList.remove('pressed');
+        await wait(t<taps-1?160:rnd(500,1600));
+      }
+      // occasionally drift off to the side before the next card
+      if(Math.random()<.3){ cur.classList.remove('tap'); place(rnd(.35,.65)*rr.width, rr.height*rnd(.82,.95)); await wait(rnd(900,1500)); }
+    }
+  }
+  var io=new IntersectionObserver(function(es){ if(es[0].isIntersecting&&!running){ running=true; setTimeout(loop,1400); io.disconnect(); } },{threshold:.35});
+  io.observe(row);
 })();

@@ -102,6 +102,17 @@
     }
   }
 
+  /* 방명록 임시 보관: 서버 연결 전/네트워크 끊김 때 남긴 글은 다음 방문 때 자동 전송 */
+  var QKEY = 'grad_gb_queue';
+  function queued() { try { return JSON.parse(store.get(QKEY) || '[]'); } catch (e) { return []; } }
+  function queueGuestbook(name, message, site) { var q = queued(); q.push({ name: name, message: message, site: site || 'invitation' }); store.set(QKEY, JSON.stringify(q.slice(-10))); }
+  function flushQueue() {
+    var q = queued(); if (!RECORD_URL || !q.length) return;
+    store.set(QKEY, '[]');
+    q.forEach(function (g) { post('guestbook', g).then(function (r) { if (!r || !r.ok) queueGuestbook(g.name, g.message, g.site); }); });
+  }
+  setTimeout(flushQueue, 1500);
+
   function event(site, action, target) { return post('event', { site: site, action: action, target: target || '' }); }
   function onStats(fn) { listeners.push(fn); if (lastStats) fn(lastStats); else load(); }
 
@@ -112,6 +123,8 @@
     event: event,
     guestbook: function (name, message, site) { return post('guestbook', { name: name, message: message, site: site || 'invitation' }); },
     lab: function (d) { return post('lab', d); },
+    queueGuestbook: queueGuestbook,
+    queued: function () { return RECORD_URL ? [] : queued(); },
     eternia: function (type, detail) { return post('eternia', { type: type, detail: detail }); },
     load: load,
     onStats: onStats,

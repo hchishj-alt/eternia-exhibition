@@ -143,7 +143,7 @@ ol,ul{list-style:none}
 /* ================= WORKS ================= */
 .works{position:relative;background:#fff;padding:calc(82 * var(--u)) calc(31.078 * var(--u)) calc(42 * var(--u))}
 .label-a{font:400 calc(11 * var(--u))/calc(16.5 * var(--u)) var(--f-aud);letter-spacing:calc(1.54 * var(--u));text-transform:uppercase;color:#191919;white-space:nowrap}
-.works-row{display:flex;justify-content:center;gap:calc(36.467 * var(--u));padding:calc(40 * var(--u)) 0 calc(55 * var(--u))}
+.works-row{position:relative;display:flex;justify-content:center;gap:calc(36.467 * var(--u));padding:calc(40 * var(--u)) 0 calc(55 * var(--u))}
 .work{position:relative;width:calc(182 * var(--u));height:calc(243 * var(--u));flex:none;display:block;-webkit-tap-highlight-color:transparent;text-align:left}
 .work-img{position:absolute;filter:drop-shadow(calc(4 * var(--u)) calc(20 * var(--u)) calc(12 * var(--u)) rgba(0,0,0,.2));transition:transform .6s var(--ease-back),filter .4s}
 .work--eternia .work-img{left:calc(-14.13 * var(--u));top:calc(-10.16 * var(--u));width:calc(211 * var(--u));height:calc(264 * var(--u))}
@@ -172,13 +172,15 @@ ol,ul{list-style:none}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(223,255,0,.7)}70%,100%{box-shadow:0 0 0 calc(14 * var(--u)) rgba(223,255,0,0)}}
 .work--hwansang.in .work-tap{animation-name:ping2}
 @keyframes ping2{0%{box-shadow:0 0 0 0 rgba(220,98,204,.7)}70%,100%{box-shadow:0 0 0 calc(14 * var(--u)) rgba(220,98,204,0)}}
-.works-hint{display:flex;align-items:center;gap:calc(8 * var(--u));width:fit-content;margin:calc(18 * var(--u)) auto 0;padding:calc(8 * var(--u)) calc(14 * var(--u));background:#191919;color:#fff;font:500 calc(11.5 * var(--u))/1.4 var(--f-kr);border-radius:999px}
+.works-hint{display:flex;align-items:center;gap:calc(8 * var(--u));width:fit-content;margin:calc(46 * var(--u)) auto 0;padding:calc(8 * var(--u)) calc(14 * var(--u));background:#191919;color:#fff;font:500 calc(11.5 * var(--u))/1.4 var(--f-kr);border-radius:999px}
 .works-hint i{width:calc(7 * var(--u));height:calc(7 * var(--u));border-radius:50%;background:var(--lime);animation:blink 1.2s ease-in-out infinite}
 @keyframes blink{50%{opacity:.2}}
-.work-cursor{position:absolute;left:calc(118 * var(--u));top:calc(150 * var(--u));width:calc(34 * var(--u));height:auto;z-index:3;pointer-events:none;opacity:0;filter:drop-shadow(0 calc(2 * var(--u)) calc(3 * var(--u)) rgba(0,0,0,.35))}
-.work.in .work-cursor{opacity:1;animation:tapHand 2.4s ease-in-out infinite 1.6s}
-@keyframes tapHand{0%,100%{transform:translate(calc(14 * var(--u)),calc(18 * var(--u)))}35%{transform:translate(0,0)}45%{transform:translate(0,0) scale(.86)}55%{transform:translate(0,0)}}
-.work--eternia.in .work-img{animation:sway 5.5s ease-in-out infinite,cardPress 2.4s ease-in-out infinite 1.6s}
+.work-cursor{position:absolute;left:0;top:0;width:calc(34 * var(--u));height:auto;z-index:3;pointer-events:none;opacity:0;filter:drop-shadow(0 calc(2 * var(--u)) calc(3 * var(--u)) rgba(0,0,0,.35));
+  transition:opacity .6s ease,transform .9s cubic-bezier(.45,.05,.25,1)}
+.work-cursor.on{opacity:1}
+.work-cursor.tap{transition:opacity .6s ease,transform .12s ease-out}
+.work.pressed .work-img{scale:.955;transition:scale .12s ease-out}
+.work .work-img{transition:transform .6s var(--ease-back),filter .4s,scale .35s var(--ease-back)}
 @keyframes cardPress{0%,40%,60%,100%{scale:1}47%{scale:.965}}
 
 /* ================= INVITATION ================= */

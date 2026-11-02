@@ -363,43 +363,103 @@
   </style>
 
 
-<style id="mobile-pass">
-/* ===== 모바일 정리: 스티키 연출을 세로 흐름으로 풀고, 글자 크기·줄바꿈을 폰에 맞춤 ===== */
+<style id="mobile-v2">
+/* ===== 모바일(≤700px): 기존 연출은 그대로, 크기만 폰에 맞춤 ===== */
 html,body{word-break:keep-all;overflow-wrap:break-word}
+.works-compact{display:none}
 @media (max-width:700px){
-  .fomo,.fopo,.scatter{height:auto!important}
-  .sticky-stage{position:relative!important;height:auto!important;min-height:0!important;overflow:visible!important;transform:none!important}
-  .scene .section-index{position:absolute;top:28px!important}
-  /* FOMO: 글 아래에 카드가 차례로 */
-  .fomo-stage{display:block!important;padding:84px 22px 56px!important}
-  .fomo-copy{padding-top:0!important}
-  .feed{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;height:auto!important;display:flex;flex-direction:column;gap:10px;margin-top:30px;perspective:none!important}
-  .feed-card{position:relative!important;top:auto!important;left:auto!important;right:auto!important;width:100%!important;min-height:0!important;padding:14px 16px!important;opacity:1!important;transform:none!important}
-  .feed-card.rec{margin-left:calc(var(--i,1) * 8px)}
-  .feed-card.r1{--i:1}.feed-card.r2{--i:2}.feed-card.r3{--i:3}.feed-card.r4{--i:4}
-  /* FOPO: 설명 → 두 선택지 */
-  .choice-stage{display:block!important;padding:84px 22px 56px!important}
-  .choice-copy{position:relative!important;left:auto!important;right:auto!important;top:auto!important;max-width:none!important}
-  .choice-field{position:relative!important;inset:auto!important;display:flex!important;flex-direction:column!important;gap:12px!important;padding:26px 0 0!important}
-  .choice{width:100%!important;min-height:108px!important;aspect-ratio:auto!important;opacity:1!important;transform:none!important}
-  /* SCATTER FACE: 글 → 얼굴 캔버스 → 기술 칩 */
-  .scatter-stage{display:flex!important;flex-direction:column;padding:84px 0 40px}
-  .scatter-stage::after{display:none}
-  .scatter-copy{position:relative!important;order:1;left:auto!important;top:auto!important;max-width:none!important;padding:0 22px}
-  #faceCanvas{position:relative!important;order:2;display:block;width:100%!important;height:min(110vw,520px)!important;inset:auto!important}
-  .scatter-tech{position:relative!important;order:3;left:auto!important;right:auto!important;bottom:auto!important;padding:0 22px;margin-top:8px}
-  /* 글자 크기 */
-  .manifesto{min-height:0!important;padding:90px 22px!important}
-  .manifesto-grid{min-height:0!important;display:flex!important;flex-direction:column;gap:110px}
-  .manifesto-line{width:100%!important;font-size:clamp(23px,6.6vw,28px)!important;line-height:1.3!important}
-  .fomo-copy h2,.choice-copy h2,.scatter-copy h2,.exhibition-head h2,.films-head h2,.system-copy h2{font-size:clamp(26px,7.6vw,32px)!important;line-height:1.22!important;letter-spacing:-.045em!important}
-  .scatter-copy h2.scatter-title,.work-heading{font-size:clamp(34px,10.5vw,44px)!important;line-height:1!important}
-  .scatter-statement{font-size:clamp(21px,6vw,25px)!important;line-height:1.3!important}
-  .jomo{min-height:0!important;padding:110px 22px 90px!important}
-  .jomo-inner h2{font-size:clamp(28px,8.2vw,34px)!important;line-height:1.28!important;letter-spacing:-.045em!important}
-  h3{font-size:clamp(22px,6.4vw,28px)}
-  h4{font-size:clamp(19px,5.4vw,22px)!important;line-height:1.35!important}
-  /* 하트는 작게, 내용 덜 가리게 */
+  .scene .section-index{font-size:9px}
+  /* 01 SIGNAL */
+  .manifesto{min-height:150vh;padding:14vh 22px 10vh}
+  .manifesto-grid{min-height:122vh}
+  .manifesto-line{width:100%;font-size:clamp(22px,6.3vw,27px);line-height:1.34;letter-spacing:-.04em}
+  /* 02 FOMO — 스크롤 따라 추천 카드가 쌓이는 연출 유지 */
+  .fomo,.fopo{height:230vh}
+  .fomo-stage{display:block!important;padding:0 22px!important}
+  .fomo-copy{position:absolute!important;left:22px;right:22px;top:max(74px,10svh);padding:0!important;width:auto!important}
+  .fomo-copy h2,.choice-copy h2{font-size:clamp(25px,7.2vw,30px);line-height:1.2;letter-spacing:-.045em;margin:10px 0 12px}
+  .fomo-copy>p:last-of-type,.choice-copy>p{font-size:12px;line-height:1.7}
+  .small-kicker{font-size:9px}
+  .feed{left:22px;right:22px;bottom:4svh;height:40svh}
+  .feed-card{width:calc(100% - 28px);min-height:0;padding:11px 14px;gap:4px;border-radius:12px}
+  .feed-card b{font-size:13.5px}
+  .feed-card span,.feed-card small{font-size:10px}
+  .feed-card.primary{top:30%;left:0}
+  .r1{top:0;left:28px}.r2{top:22%;left:0}.r3{top:45%;left:28px}.r4{top:68%;left:6px}
+  /* 03 FOPO — 선택지가 끌려가는 연출 유지 */
+  .choice-stage{padding:0 22px}
+  .choice-copy{left:22px;right:22px;top:max(74px,10svh)}
+  .choice-field{justify-content:flex-end;padding:0 22px 13svh;gap:12px}
+  .choice{width:100%;aspect-ratio:auto;min-height:0;height:min(15svh,118px);padding:14px 18px}
+  .choice strong{font-size:21px}
+  .choice-caption{bottom:4svh;font-size:9.5px}
+  /* 04+05 → 간결한 작품 소개 하나로 */
+  .exhibition,.films{display:none}
+  .works-compact{display:block;position:relative;padding:84px 22px 64px;background:#050207}
+  .works-compact h2{font-size:clamp(25px,7.2vw,30px);line-height:1.2;letter-spacing:-.045em;margin:10px 0 22px;font-weight:760}
+  .works-compact h2 span{color:var(--pink-soft)}
+  .wc-card{border:1px solid rgba(255,255,255,.14);border-radius:16px;background:rgba(255,255,255,.025);padding:18px;margin-top:12px}
+  .wc-top{display:flex;justify-content:space-between;font:9px var(--mono);letter-spacing:.14em;color:var(--muted)}
+  .wc-card h3{font-size:22px;letter-spacing:-.04em;margin:10px 0 8px}
+  .wc-card p{font-size:12px;line-height:1.7;color:var(--muted)}
+  .wc-scenes{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 0;padding:0;counter-reset:sc}
+  .wc-scenes li{counter-increment:sc;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 6px;font-size:9.5px;color:var(--muted);text-align:center;line-height:1.35}
+  .wc-scenes li::before{content:"0" counter(sc);display:block;font:8px var(--mono);color:var(--pink);margin-bottom:3px}
+  .wc-scenes b{display:block;color:#fff;font-size:12px;font-weight:600}
+  .wc-play{display:flex;align-items:center;justify-content:space-between;margin-top:14px;height:46px;padding:0 16px;border-radius:999px;background:var(--pink,#ff4fd8);color:#0b0610;font-weight:700;font-size:13px;text-decoration:none}
+  .wc-play small{font:9px var(--mono);letter-spacing:.12em;opacity:.75}
+  .wc-play[aria-disabled="true"]{background:rgba(255,118,223,.16);color:#fff;border:1px solid rgba(255,118,223,.45)}
+  .wc-link{display:inline-block;margin-top:12px;font:10px var(--mono);letter-spacing:.12em;color:var(--pink-soft);text-decoration:none}
+  /* 06~09: 섹션마다 한 화면 안에 */
+  .scatter .section-index,.algorithm-lab .section-index{display:none}
+  .scatter{height:200vh}
+  .scatter-stage{padding:0}
+  .scatter-copy{left:22px!important;right:22px;top:max(70px,9svh)!important;max-width:none!important}
+  .scatter-copy .work-identity{font-size:8.5px}
+  .scatter-copy h2.scatter-title{font-size:clamp(32px,9.6vw,40px);margin:6px 0 4px}
+  .scatter-copy .work-medium{font-size:8.5px}
+  .scatter-statement{font-size:clamp(17px,5vw,20px);line-height:1.3;margin:12px 0 0}
+  .scatter-description{display:none}
+  .scatter-stage::after{background:linear-gradient(180deg,rgba(3,1,4,.92) 0 34%,transparent 62%)}
+  .ball-hint{bottom:calc(4svh + 92px)!important;font-size:9px}
+  .scatter-tech{left:22px!important;right:22px!important;bottom:4svh!important;display:grid!important;grid-template-columns:1fr 1fr;gap:6px;overflow:visible!important}
+  .scatter-tech button{min-width:0!important;padding:8px 10px!important;font-size:11px}
+  .system{min-height:100svh;padding:72px 22px 40px!important;display:flex;align-items:center}
+  .system-inner{width:100%}
+  .system-copy h2{font-size:clamp(23px,6.6vw,28px)!important;line-height:1.22;margin:8px 0 10px}
+  .system-copy>p:last-child{font-size:11.5px;line-height:1.65}
+  .system-flow{display:grid!important;grid-template-columns:1fr 1fr!important;overflow:visible!important;margin-top:18px}
+  .system-flow>i{display:none!important}
+  .system-flow article{display:block!important;width:auto!important;min-width:0!important}
+  .system-flow article{min-height:0!important;padding:12px!important;border-left:1px solid var(--line)!important}
+  .system-flow article:nth-child(odd){border-left:0!important}
+  .system-flow article b{font-size:11px}
+  .system-flow article p{font-size:10.5px;line-height:1.5;margin-top:4px}
+  .system-specs{margin-top:12px;gap:6px;font-size:8px}
+  .algorithm-lab{padding:72px 18px 40px!important}
+  .lab-head .work-heading{font-size:clamp(32px,9.6vw,40px)!important}
+  .lab-head .work-description,.lab-head .work-medium,.lab-panel-top,.stream-status{display:none!important}
+  .lab-grid{margin-top:16px}
+  .lab-console,.lab-output{padding:14px!important}
+  .lab-identity small,.lab-disclaimer,.algorithm-dialogue,.signal-title small{display:none!important}
+  .lab-identity{margin:0 0 8px!important}
+  .lab-name-wrap input{height:36px!important}
+  .signal-control{margin-top:10px!important}
+  .intensity-control{margin-top:10px!important}
+  .lab-input-wrap textarea{height:52px;min-height:0;font-size:15px}
+  .signal-buttons{grid-template-columns:repeat(3,1fr)!important}
+  .signal-button{border-right:1px solid var(--line)!important;border-bottom:0!important;padding:10px 8px!important}
+  .signal-button:last-child{border-right:0!important}
+  .signal-button span{font-size:10px}
+  .intervene-button{height:48px;margin-top:10px}
+  .community-feed{--post-h:84px;max-height:calc(var(--post-h) * 2.2)!important}
+  .community-card footer{display:none}
+  .community-card{padding:10px 12px!important}
+  .community-card p{font-size:12px}
+  .jomo{min-height:100svh!important;padding:80px 22px 60px!important;display:flex;align-items:center}
+  .jomo-inner h2{font-size:clamp(26px,7.6vw,32px)!important;line-height:1.28!important;letter-spacing:-.045em!important}
+  .jomo-inner>p{font-size:12px;line-height:1.7}
+  .final-choice strong{font-size:17px}
   .gr-heart{height:38px!important;padding:0 10px!important;gap:5px!important}
   .gr-heart svg{width:17px!important;height:17px!important}
 }
@@ -563,6 +623,26 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
         </div>
       </div>
 
+    </section>
+
+    <section class="works-compact scene" data-state="WORKS" aria-label="작품 소개">
+      <div class="section-index">04 / WORKS</div>
+      <p class="small-kicker">EXHIBITION · 2 WORKS</p>
+      <h2>두 작업,<br><span>두 가지 경험.</span></h2>
+      <article class="wc-card">
+        <div class="wc-top"><span>WORK 01</span><span>ART FILM · MIME</span></div>
+        <h3>환상선택</h3>
+        <p>내가 고른다고 믿는 선택이 알고리즘과 집단의 행동으로 연출된 것은 아닌지 묻는 아트필름. 실사 영상 위에 2D 애니메이션을 겹쳐 보이지 않는 개입을 드러낸다.</p>
+        <ol class="wc-scenes"><li><b>욕조</b>생성</li><li><b>지하철</b>동조</li><li><b>면접장</b>판단 마비</li><li><b>사다리</b>탈출</li></ol>
+        <!-- 유튜브 주소를 data-youtube 에 넣으면 버튼이 켜집니다 -->
+        <a class="wc-play" id="filmPlay" href="#" data-youtube="" aria-disabled="true">▶ 영상 보기 <small>COMING SOON</small></a>
+      </article>
+      <article class="wc-card">
+        <div class="wc-top"><span>WORK 02</span><span>INTERACTIVE INSTALLATION</span></div>
+        <h3>SCATTER FACE</h3>
+        <p>관람자의 얼굴이 문자 이미지가 되어 당구대 위에 투사되고, 실제 공이 부딪힐 때마다 흩어졌다 다시 모인다.</p>
+        <a class="wc-link" href="#scatter">아래에서 체험하기 ↓</a>
+      </article>
     </section>
 
     <section class="scatter scene" id="scatter" data-state="SCATTER FACE">
@@ -929,6 +1009,11 @@ updateGlobal();
     R.lab({name:n?n.value.trim():'', text:text, signal:sig?sig.dataset.signal:'', intensity:r?Number(r.value):''});
   });
 })();
+</script>
+<script>
+(function(){var a=document.getElementById('filmPlay');if(!a)return;var u=a.getAttribute('data-youtube');
+if(u){a.href=u;a.target='_blank';a.rel='noopener';a.removeAttribute('aria-disabled');a.querySelector('small').textContent='YOUTUBE ↗';}
+else a.addEventListener('click',function(e){e.preventDefault();});})();
 </script>
 </body>
 </html>
