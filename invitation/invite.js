@@ -297,10 +297,11 @@
   function u(){ return Math.min(1, window.innerWidth/518); }
   function update(){
     ticking=false;
-    var d = window.scrollY < 733*u();
+    var h=document.querySelector('.hero'); var d = window.scrollY < (h ? h.offsetHeight-12*u() : 733*u());
     if (d===docked) return;
     docked=d;
     nav.classList.toggle('docked', d);
+    document.body.classList.toggle('hero-on', d);
     nav.classList.remove('float-in');
     if(!d){ void nav.offsetWidth; nav.classList.add('float-in'); }
   }

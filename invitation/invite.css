@@ -123,6 +123,21 @@ ol,ul{list-style:none}
 .ready .hero-scroll{opacity:1}
 .hero-arrow{position:absolute;left:calc(494 * var(--u));top:calc(654 * var(--u));width:calc(9 * var(--u));height:calc(7 * var(--u));background:var(--lime);clip-path:polygon(6.7% 0,93.3% 0,50% 75%);opacity:0;transition:opacity .8s ease 2.4s}
 .ready .hero-arrow{opacity:1;animation:nudge 1.6s ease-in-out infinite 2.4s}
+
+/* full-screen hero on tall phones: stretch the blue plate, spread the layers */
+:root{--ex:max(0px, calc(100vh - calc(745 * var(--u))))}
+.hero{height:calc(calc(745 * var(--u)) + var(--ex))}
+@supports (height:100svh){:root{--ex:max(0px, calc(100svh - calc(745 * var(--u))))}.hero{height:max(calc(calc(745 * var(--u)) + var(--ex)), 100lvh)}}
+.hero-plate{width:100%;height:100%;object-fit:fill}
+.c1{top:calc(calc(57 * var(--u)) + var(--ex) * .2)}.c3{top:calc(calc(210 * var(--u)) + var(--ex) * .3)}.c4{top:calc(calc(118 * var(--u)) + var(--ex) * .25)}.c5{top:calc(calc(360 * var(--u)) + var(--ex) * .5)}
+.hero-title{top:calc(calc(141.5 * var(--u)) + var(--ex) * .6)}
+.hero-invite{top:calc(calc(442 * var(--u)) + var(--ex) * .66)}
+.hero-person-wrap{top:calc(calc(156 * var(--u)) + var(--ex) * .6)}
+.hero-shadow{top:calc(calc(576 * var(--u)) + var(--ex) * .6)}
+.hero-smoke{top:calc(calc(453 * var(--u)) + var(--ex) * .6)}
+.hero-date{top:calc(calc(590 * var(--u)) + var(--ex))}
+.hero-scroll{top:calc(calc(642 * var(--u)) + var(--ex))}
+.hero-arrow{top:calc(calc(654 * var(--u)) + var(--ex))}
 @keyframes nudge{0%,100%{transform:translateY(calc(-1.5 * var(--u)))}50%{transform:translateY(calc(2.5 * var(--u)))}}
 
 /* ================= WORKS ================= */
@@ -376,7 +391,9 @@ ol,ul{list-style:none}
   transform:translateY(140%);transition:transform .8s var(--ease-back) 2.6s}
 .ready .fnav,.ready~.fnav{transform:none}
 /* 처음엔 피그마처럼 히어로 오른쪽 아래(스크롤 배지 밑)에 붙어 있다가, 히어로를 지나면 화면 아래에 떠 있는 메뉴로 */
-.fnav.docked{position:absolute;top:calc(687 * var(--u));bottom:auto}
+.gr-heart{transition:opacity .4s ease,transform .25s cubic-bezier(.34,1.56,.64,1)!important}
+body.hero-on .gr-heart{opacity:0;pointer-events:none}
+.fnav.docked{position:absolute;top:calc(calc(687 * var(--u)) + var(--ex));bottom:auto}
 .fnav.float-in{animation:fnavIn .55s var(--ease-back) both}
 @keyframes fnavIn{from{transform:translateY(140%)}to{transform:none}}
 .fnav a{display:flex;align-items:center;padding:0 calc(7 * var(--u)) 0 calc(13 * var(--u));font:400 calc(12 * var(--u))/calc(19.8 * var(--u)) var(--f-kr);color:#191919}
