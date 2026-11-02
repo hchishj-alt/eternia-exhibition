@@ -395,7 +395,7 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
   .choice-caption{bottom:4svh;font-size:9.5px}
   /* 04+05 → 간결한 작품 소개 하나로 */
   .exhibition,.films{display:none}
-  .works-compact{display:block;position:relative;padding:84px 22px 64px;background:#050207}
+  .works-compact{display:block;position:relative;padding:100px 22px 64px;background:#050207}
   .works-compact h2{font-size:clamp(25px,7.2vw,30px);line-height:1.2;letter-spacing:-.045em;margin:10px 0 22px;font-weight:760}
   .works-compact h2 span{color:var(--pink-soft)}
   .wc-card{border:1px solid rgba(255,255,255,.14);border-radius:16px;background:rgba(255,255,255,.025);padding:18px;margin-top:12px}
@@ -451,7 +451,7 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
   .signal-button{border-right:1px solid var(--line)!important;border-bottom:0!important;padding:10px 8px!important}
   .signal-button:last-child{border-right:0!important}
   .signal-button span{font-size:10px}
-  .intervene-button{height:48px;margin-top:10px}
+  .intervene-button{height:48px;margin-top:10px;padding:0 18px!important}
   .community-feed{--post-h:84px;max-height:calc(var(--post-h) * 2.2)!important}
   .community-card footer{display:none}
   .community-card{padding:10px 12px!important}
@@ -463,6 +463,8 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
   .gr-heart{height:38px!important;padding:0 10px!important;gap:5px!important}
   .gr-heart svg{width:17px!important;height:17px!important}
 }
+.intervene-button{align-items:center!important;align-content:center}
+.intervene-button>*{line-height:1!important;margin:0!important;display:flex;align-items:center}
 </style>
 </head>
 <body>
@@ -495,7 +497,7 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
           <span class="ghost ghost-b">선택</span>
           <h1 aria-label="환상 선택"><span class="title-char">환</span><span class="title-char">상</span><span class="title-char gap" aria-hidden="true"></span><span class="title-char">선</span><span class="title-char">택</span></h1>
         </div>
-        <p class="hero-question">우리가 소비하고 있는 콘텐츠는<br class="desktop-br"> 정말 우리가 <span class="question-accent">선택한 콘텐츠</span>일까?</p>
+        <p class="hero-question">우리가 소비하고 있는 콘텐츠는<br>정말 우리가 <span class="question-accent">선택한 콘텐츠</span>일까?</p>
         <div class="hero-meta">
           <span>ART FILM · LIVE ACTION + 2D ANIMATION</span>
           <span>FOMO · FOPO · JOMO</span>
@@ -627,8 +629,8 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
 
     <section class="works-compact scene" data-state="WORKS" aria-label="작품 소개">
       <div class="section-index">04 / WORKS</div>
-      <p class="small-kicker">EXHIBITION · 2 WORKS</p>
-      <h2>두 작업,<br><span>두 가지 경험.</span></h2>
+      <p class="small-kicker">EXHIBITION · FILM + INTERACTIVE</p>
+      <h2>다양한 매체로 그린,<br><span>미디어 소비자의 현시점.</span></h2>
       <article class="wc-card">
         <div class="wc-top"><span>WORK 01</span><span>ART FILM · MIME</span></div>
         <h3>환상선택</h3>
@@ -640,7 +642,7 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
       <article class="wc-card">
         <div class="wc-top"><span>WORK 02</span><span>INTERACTIVE INSTALLATION</span></div>
         <h3>SCATTER FACE</h3>
-        <p>관람자의 얼굴이 문자 이미지가 되어 당구대 위에 투사되고, 실제 공이 부딪힐 때마다 흩어졌다 다시 모인다.</p>
+        <p>당구대가 컨트롤러가 된다. 관람자가 굴린 공이 부딪힐 때마다 모니터 속 문자 얼굴이 흩어졌다 다시 모인다.</p>
         <a class="wc-link" href="#scatter">아래에서 체험하기 ↓</a>
       </article>
     </section>
@@ -652,46 +654,24 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
         <div class="scatter-copy reveal">
           <div class="work-identity"><span class="work-no">STANDALONE WORK</span><span class="work-slash">/</span><span class="work-type">INTERACTIVE INSTALLATION</span></div>
           <h2 class="work-heading scatter-title">SCATTER FACE</h2>
-          <p class="work-medium">INTERACTIVE INSTALLATION · REAL BALL / PROJECTED FACE</p>
+          <p class="work-medium">INTERACTIVE INSTALLATION · REAL BALL / SCREEN FACE</p>
           <h3 class="scatter-statement"><span class="keep">얼굴은 문자 이미지가 되고,</span><br><span class="accent-line">실제 공의 충돌을 따라</span><br><span class="keep">흩어졌다 다시 조립된다.</span></h3>
-          <p class="scatter-description">SCATTER FACE는 〈환상선택〉의 서사와 분리된 단독 인터랙티브 설치 작품이다. 관람자의 얼굴을 문자 이미지로 재구성해 당구대 위에 투사하고, 실제 당구공이 글자와 충돌할 때 얼굴이 흩어졌다가 일정 시간이 지나면 다시 복원되도록 구성한다.</p>
+          <p class="scatter-description">SCATTER FACE는 〈환상선택〉의 서사와 분리된 단독 인터랙티브 설치 작품이다. 당구대가 컨트롤러가 된다. 관람자가 굴린 공의 움직임을 감지해 TouchDesigner로 보내고, 모니터 속 문자 얼굴은 공이 부딪힐 때마다 흩어졌다가 일정 시간이 지나면 다시 조립된다.</p>
         </div>
         <div class="ball-hint">MOVE THE BALL <i></i></div>
         <div class="scatter-tech">
-          <button type="button" data-tech="sensor"><span>01</span><b>관람자 감지</b></button>
+          <button type="button" data-tech="sensor"><span>01</span><b>굴린 공 감지</b></button>
           <button type="button" data-tech="touch"><span>02</span><b>TouchDesigner</b></button>
-          <button type="button" data-tech="projection"><span>03</span><b>프로젝터 투사</b></button>
-          <button type="button" data-tech="collision"><span>04</span><b>공 충돌 / 분해</b></button>
+          <button type="button" data-tech="controller"><span>03</span><b>당구대 = 컨트롤러</b></button>
+          <button type="button" data-tech="collision"><span>04</span><b>모니터 속 충돌·분해</b></button>
         </div>
       </div>
     </section>
 
-    <section class="system scene" data-state="SYSTEM">
-      <div class="section-index">07 / SYSTEM</div>
-      <div class="system-inner">
-        <div class="system-copy reveal">
-          <p class="small-kicker">HOW IT WORKS</p>
-          <h2>현실의 움직임이<br><span>투사된 얼굴을 직접 흔든다.</span></h2>
-          <p>센서가 관람자와 공의 위치를 읽고, TouchDesigner가 얼굴 문자 이미지와 충돌 좌표를 연결한다. 프로젝터는 그 결과를 실제 당구대 위에 즉시 투사한다.</p>
-        </div>
-        <div class="system-flow">
-          <article><span>01</span><b>KINECT / SENSOR</b><p>관람자와 실제 공의 위치를 감지한다.</p></article>
-          <i>→</i>
-          <article><span>02</span><b>TOUCHDESIGNER</b><p>얼굴을 문자로 변환하고 충돌 좌표를 계산한다.</p></article>
-          <i>→</i>
-          <article><span>03</span><b>PROJECTOR</b><p>재구성된 얼굴을 당구대 면에 투사한다.</p></article>
-          <i>→</i>
-          <article><span>04</span><b>COLLISION</b><p>공이 닿은 글자가 분해되고 다시 복원된다.</p></article>
-        </div>
-        <div class="system-specs">
-          <span>TABLE 1600 × 900 mm</span><span>ROI &gt; PROJECTION AREA</span><span>PROJECTOR HEIGHT 2200–2250 mm</span><span>REAL BALL / PROJECTED FACE</span>
-        </div>
-      </div>
-    </section>
 
 
     <section class="algorithm-lab scene" id="lab" data-state="ALGORITHM LAB">
-      <div class="section-index">08 / PARTICIPATORY EXPERIENCE</div>
+      <div class="section-index">07 / PARTICIPATORY EXPERIENCE</div>
       <div class="lab-inner">
         <div class="lab-head reveal">
           <div class="work-identity"><span class="work-no">EXPERIENCE 01</span><span class="work-slash">/</span><span class="work-type">PARTICIPATORY INTERACTION</span></div>
@@ -751,7 +731,7 @@ html,body{word-break:keep-all;overflow-wrap:break-word}
     </section>
 
     <section class="jomo scene" data-state="JOMO">
-      <div class="section-index">09 / JOMO</div>
+      <div class="section-index">08 / JOMO</div>
       <div class="jomo-inner reveal">
         <p class="small-kicker">JOY OF MISSING OUT</p>
         <h2>흐름에서 벗어난 순간,<br>선택은 다시 느려진다.</h2>
@@ -858,7 +838,7 @@ const drawer=qs('#detailDrawer'),drawerTitle=qs('#drawerTitle'),drawerKicker=qs(
 const drawerData={
   artfilm:{kicker:'환상선택 / ART FILM',title:'MIME',lead:'알고리즘이 개입한 미디어 환경 속에서 우리가 자신의 선택이라 믿는 것이 진정한 선택인지 묻는 아트필름이다.',body:[['MIME / MINE ≠ MIME','나의 의지라고 믿은 선택과 행동이 외부의 신호와 집단의 반응에 의해 만들어질 수 있다는 간극을 제목에 담는다.'],['LIVE ACTION + 2D','통제된 공간과 집단 행동을 실사로 촬영하고, 그 위에 2D 애니메이션을 결합해 눈에 보이지 않는 알고리즘의 개입을 시각화한다.'],['CHOICE','한 인물은 구조에 동화되고 다른 인물은 이를 인지하며 벗어나려 한다. 두 방향의 대비를 통해 자신의 선택이라고 믿는 판단이 어디에서 형성되는지 돌아보게 한다.']]},
   mime:{kicker:'환상선택 / ART FILM',title:'MIME',lead:'스스로 선택한다고 믿는 개인의 판단이 보이지 않는 알고리즘과 집단 행동에 의해 어떻게 흔들리는지를 다룬다.',body:[['MINE ≠ MIME','나의 의지라고 믿은 선택과 행동이 외부의 신호에 의해 만들어질 수 있다는 간극을 제목 자체에 담는다.'],['CONTROLLED SPACE','욕조, 지하철, 면접장처럼 익숙한 공간을 통제된 실험실로 바꾸고 반복되는 신호와 집단 행동으로 보이지 않는 개입을 드러낸다.'],['2D ALGORITHM','실사 영상 위에 삽입되는 2D 애니메이션은 인물들에게는 보이지 않지만 행동과 판단에 영향을 주는 알고리즘을 시각화한다.']]},
-  scatter:{kicker:'STANDALONE INTERACTIVE INSTALLATION',title:'SCATTER FACE',lead:'〈환상선택〉과 별개의 단독 기획으로, 현실의 얼굴이 문자 이미지로 변환되고 실제 당구공의 충돌에 따라 흩어졌다가 다시 복원되는 과정을 직접 체험하게 한다.',body:[['INPUT','센서가 관람자와 당구공의 위치를 감지하고 얼굴을 문자 이미지로 변환한다.'],['PROCESS','TouchDesigner가 얼굴 문자 이미지와 실제 공의 좌표를 매핑하고, 공이 닿는 영역의 문자를 분해한다.'],['OUTPUT','프로젝터가 결과를 실제 당구대 면에 투사한다. 관람자의 움직임과 공의 충돌이 즉시 이미지에 개입하며, 흩어진 얼굴은 일정 시간 뒤 다시 복원된다.']]}
+  scatter:{kicker:'STANDALONE INTERACTIVE INSTALLATION',title:'SCATTER FACE',lead:'〈환상선택〉과 별개의 단독 기획으로, 당구대를 컨트롤러 삼아 관람자가 직접 공을 굴리고, 그 충돌에 따라 모니터 속 문자 얼굴이 흩어졌다가 다시 조립되는 과정을 체험하게 한다.',body:[['INPUT','관람자가 당구대 위에서 굴린 공의 위치와 움직임을 감지한다. 당구대 자체가 작품의 컨트롤러가 된다.'],['PROCESS','TouchDesigner가 공의 좌표를 얼굴 문자 이미지에 연결하고, 공이 닿은 자리의 문자를 분해한다.'],['OUTPUT','결과는 모니터에 바로 나타난다. 공이 부딪힐 때마다 얼굴이 추돌·분해되고, 흩어진 얼굴은 일정 시간 뒤 다시 복원된다.']]}
 };
 function openDrawer(key){const d=drawerData[key];if(!d)return;drawerTarget=key;drawerKicker.textContent=d.kicker;drawerTitle.textContent=d.title;drawerLead.textContent=d.lead;drawerBody.innerHTML=d.body.map(([h,p])=>`<section><h4>${h}</h4><p>${p}</p></section>`).join('');drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}
 function closeDrawer(){drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');document.body.style.overflow=''}
