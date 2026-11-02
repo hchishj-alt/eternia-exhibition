@@ -284,7 +284,7 @@
       gList.insertAdjacentHTML('afterbegin', entryHtml({ name, message: msg, time: '보냄' }));
       gList.firstElementChild.classList.add('new');
       $('#gMsg').value = '';
-      gStatus.textContent = '고마워요! 하진에게 마음이 전해졌어요.';
+      gStatus.textContent = '고마워요! 마음이 잘 전해졌어요.';
     } else if (res && (res.error === 'not_configured' || res.error === 'network') && R.queueGuestbook) {
       // 서버가 아직 연결 전이거나 잠깐 끊겼을 때: 이 브라우저에 보관했다가 연결되면 자동 전송
       R.queueGuestbook(name, msg, 'invitation');
