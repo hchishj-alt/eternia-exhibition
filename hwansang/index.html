@@ -995,5 +995,31 @@ updateGlobal();
 if(u){a.href=u;a.target='_blank';a.rel='noopener';a.removeAttribute('aria-disabled');a.querySelector('small').textContent='YOUTUBE ↗';}
 else a.addEventListener('click',function(e){e.preventDefault();});})();
 </script>
+<button id="hsSound" type="button" aria-label="배경음 끄기" aria-pressed="true"><i></i><i></i><i></i><i></i></button>
+<style>
+#hsSound{position:fixed;z-index:120;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:46px;height:46px;display:flex;align-items:center;justify-content:center;gap:3px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(10,6,12,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#hsSound i{width:3px;height:14px;border-radius:2px;background:#ff76df;transform-origin:50% 100%;transform:scaleY(.3);transition:transform .3s}
+#hsSound.on i{animation:hsEq .9s ease-in-out infinite}
+#hsSound.on i:nth-child(2){animation-delay:-.3s}#hsSound.on i:nth-child(3){animation-delay:-.6s}#hsSound.on i:nth-child(4){animation-delay:-.15s}
+@keyframes hsEq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+@media (max-width:700px){#hsSound{width:38px;height:38px}}
+</style>
+<script>
+(function(){
+  var btn=document.getElementById('hsSound'),bgm=new Audio('assets/hwansang-bgm.mp3');
+  bgm.loop=true;bgm.volume=.35;bgm.preload='auto';
+  var KEY='hs_sound',enabled=true,playing=false;
+  try{enabled=localStorage.getItem(KEY)!=='off'}catch(e){}
+  function paint(){btn.classList.toggle('on',enabled&&playing);btn.setAttribute('aria-pressed',String(enabled));btn.setAttribute('aria-label',enabled?'배경음 끄기':'배경음 켜기');btn.title=enabled?'소리 끄기':'소리 켜기'}
+  function play(){if(!enabled)return;bgm.play().then(function(){playing=true;paint()}).catch(function(){playing=false;paint()})}
+  // 소리는 기본으로 켜짐: 브라우저가 막으면 첫 터치/클릭 때 시작
+  function unlock(e){if(e&&e.target&&e.target.closest&&e.target.closest('#hsSound'))return;play();if(playing)off()}
+  function off(){['pointerdown','touchstart','keydown'].forEach(function(t){removeEventListener(t,unlock,true)})}
+  ['pointerdown','touchstart','keydown'].forEach(function(t){addEventListener(t,unlock,true)});
+  btn.addEventListener('click',function(){enabled=!enabled;try{localStorage.setItem(KEY,enabled?'on':'off')}catch(e){}if(enabled)play();else{bgm.pause();playing=false}paint()});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)bgm.pause();else if(enabled&&playing)bgm.play().catch(function(){})});
+  paint();play();
+})();
+</script>
 </body>
 </html>
