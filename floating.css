@@ -10,7 +10,6 @@ html,body{height:100%;height:100dvh;overflow:hidden;background:#0b0c10}body{font
 .reward-reset{display:block;margin:5px 5px 0;padding:3px 0;font-size:6px;color:#8798b6}.reward-reset:hover{color:#d4e8b0}@media(max-width:380px){header{gap:7px}.wordmark{width:90px}.tour-hud{padding:6px 8px;gap:5px}.hud-hex,.hud-copy>span{display:none}.quiet{padding:9px;font-size:7px}.hud-copy strong{font-size:17px}}
 
 /* Refined exhibition navigation, self-hosted Pretendard. */
-@font-face{font-family:Pretendard;src:url('assets/PretendardVariable.woff2') format('woff2');font-weight:100 900;font-display:swap}
 html,body,button,input,small,span,b,i,h1,h2,h3,p{font-family:Pretendard,-apple-system,BlinkMacSystemFont,sans-serif!important}
 .story-top{display:none}.category-menu i{width:43px;flex-shrink:0;opacity:1}.category-menu i img{display:none}.category-menu i:before{content:'이동';display:grid;place-items:center;width:42px;height:28px;background:#d7ed91;color:#536334;font-style:normal;font-size:10px;font-weight:650;border-radius:9px;box-shadow:0 3px 8px #0001}.category-menu b{font-size:10px}.category-menu button{gap:7px;padding:10px 8px}.category-no{font-size:18px}.category-menu button.current i:before{background:#c5df72}.story h1{font-size:19px}.category-menu i:after{display:none!important}
 

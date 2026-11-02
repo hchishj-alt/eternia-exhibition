@@ -194,7 +194,7 @@
     const g = c.getContext('2d');
     try { await Promise.all(['700 112px "Space Grotesk"', '500 14px "Space Grotesk"', '400 20px Audiowide', '700 20px "Noto Sans KR"', '500 20px "Noto Sans KR"', '400 20px "Noto Sans KR"'].map(f => document.fonts.load(f, 'A가'))); } catch (e) {}
     const [plate, person, shadow, smoke, cloud, logo] = await Promise.all(
-      ['hero-plate.jpg', 'hero-person.png', 'hero-shadow.png', 'hero-smoke.png', 'cloud.png', 'logo-mark.png'].map(n => loadImg('assets/' + n)));
+      ['hero-plate.jpg', 'hero-person.webp', 'hero-shadow.png', 'hero-smoke.webp', 'cloud.png', 'logo-mark.png'].map(n => loadImg('assets/' + n)));
     const U = v => v * s;
     // spaced text helper (letter-spacing in design px), align: left/right
     function text(str, x, y, font, color, ls = 0, align = 'left', alpha = 1) {
@@ -302,4 +302,23 @@
       gStatus.textContent = '고마워요! 방명록에 남겨졌어요.';
     } else { gStatus.textContent = '저장하지 못했어요. 잠시 후 다시 시도해 주세요.'; shake(); }
   });
+})();
+
+/* floating nav: docked in hero → fixed after the hero */
+(function(){
+  var nav=document.querySelector('.fnav'); if(!nav) return;
+  var docked=null, ticking=false;
+  function u(){ return Math.min(1, window.innerWidth/518); }
+  function update(){
+    ticking=false;
+    var d = window.scrollY < 733*u();
+    if (d===docked) return;
+    docked=d;
+    nav.classList.toggle('docked', d);
+    nav.classList.remove('float-in');
+    if(!d){ void nav.offsetWidth; nav.classList.add('float-in'); }
+  }
+  update();
+  window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } },{passive:true});
+  window.addEventListener('resize',update);
 })();

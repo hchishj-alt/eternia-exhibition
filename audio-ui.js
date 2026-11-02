@@ -1,7 +1,7 @@
 // Sound is on by default: the BGM and a logo sting start together with the logo animation.
 // Browsers may block sound until the first click, so in that case the intro waits on its 시작하기 button.
 const button=document.createElement('button');button.id='soundToggle';button.type='button';document.body.append(button);
-const bgm=new Audio('assets/hornet-bgm.mp3');bgm.loop=true;bgm.volume=.22;bgm.preload='auto';let enabled=true,unlocked=false,skipToggle=false,ctx,missionTimer;
+const bgm=new Audio('assets/hornet-bgm.mp3');bgm.loop=true;bgm.volume=.22;bgm.preload='none';let enabled=true,unlocked=false,skipToggle=false,ctx,missionTimer;
 const intro=document.querySelector('#gameIntro'),introPlay=document.querySelector('#introPlay');
 function paint(){button.textContent=enabled?'♫':'♪';button.classList.toggle('muted',!enabled);button.setAttribute('aria-label',enabled?'전체 소리 끄기':'전체 소리 켜기');button.setAttribute('aria-pressed',String(enabled));button.title=enabled?'소리 끄기':'소리 켜기'}paint();
 try{ctx=new AudioContext()}catch{}

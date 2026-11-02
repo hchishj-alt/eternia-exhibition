@@ -118,10 +118,11 @@ ol,ul{list-style:none}
 
 .hero-scroll{position:absolute;left:435px;top:642px;width:55px;padding:3.2px 5.8px;background:rgba(255,254,250,.92);
   font:500 5.809px/1.2 var(--f-sg);letter-spacing:.4647px;color:#132c20;text-align:center;opacity:0;transition:opacity .8s ease 2.3s}
+.hero-scroll span{display:block;width:59.382px}
 .ready .hero-scroll{opacity:1}
-.hero-arrow{position:absolute;left:494px;top:654px;width:9px;height:7px;background:#fff;clip-path:polygon(0 0,100% 0,50% 100%);opacity:0;transition:opacity .8s ease 2.4s}
+.hero-arrow{position:absolute;left:494px;top:654px;width:9px;height:7px;background:var(--lime);clip-path:polygon(6.7% 0,93.3% 0,50% 75%);opacity:0;transition:opacity .8s ease 2.4s}
 .ready .hero-arrow{opacity:1;animation:nudge 1.6s ease-in-out infinite 2.4s}
-@keyframes nudge{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}
+@keyframes nudge{0%,100%{transform:translateY(-1.5px)}50%{transform:translateY(2.5px)}}
 
 /* ================= WORKS ================= */
 .works{position:relative;background:#fff;padding:82px 31.078px 42px}
@@ -363,6 +364,10 @@ ol,ul{list-style:none}
   display:flex;gap:6px;height:46px;background:rgba(243,243,239,.95);border:1PX solid #000;-webkit-backdrop-filter:blur(10PX);backdrop-filter:blur(10PX);
   transform:translateY(140%);transition:transform .8s var(--ease-back) 2.6s}
 .ready .fnav,.ready~.fnav{transform:none}
+/* 처음엔 피그마처럼 히어로 오른쪽 아래(스크롤 배지 밑)에 붙어 있다가, 히어로를 지나면 화면 아래에 떠 있는 메뉴로 */
+.fnav.docked{position:absolute;top:687px;bottom:auto}
+.fnav.float-in{animation:fnavIn .55s var(--ease-back) both}
+@keyframes fnavIn{from{transform:translateY(140%)}to{transform:none}}
 .fnav a{display:flex;align-items:center;padding:0 7px 0 13px;font:400 12px/19.8px var(--f-kr);color:#191919}
 .fnav a.on{background:var(--lime);color:#112e48;padding:0 13px}
 

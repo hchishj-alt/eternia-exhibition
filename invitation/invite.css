@@ -119,10 +119,11 @@ ol,ul{list-style:none}
 
 .hero-scroll{position:absolute;left:calc(435 * var(--u));top:calc(642 * var(--u));width:calc(55 * var(--u));padding:calc(3.2 * var(--u)) calc(5.8 * var(--u));background:rgba(255,254,250,.92);
   font:500 calc(5.809 * var(--u))/1.2 var(--f-sg);letter-spacing:calc(.4647 * var(--u));color:#132c20;text-align:center;opacity:0;transition:opacity .8s ease 2.3s}
+.hero-scroll span{display:block;width:calc(59.382 * var(--u))}
 .ready .hero-scroll{opacity:1}
-.hero-arrow{position:absolute;left:calc(494 * var(--u));top:calc(654 * var(--u));width:calc(9 * var(--u));height:calc(7 * var(--u));background:#fff;clip-path:polygon(0 0,100% 0,50% 100%);opacity:0;transition:opacity .8s ease 2.4s}
+.hero-arrow{position:absolute;left:calc(494 * var(--u));top:calc(654 * var(--u));width:calc(9 * var(--u));height:calc(7 * var(--u));background:var(--lime);clip-path:polygon(6.7% 0,93.3% 0,50% 75%);opacity:0;transition:opacity .8s ease 2.4s}
 .ready .hero-arrow{opacity:1;animation:nudge 1.6s ease-in-out infinite 2.4s}
-@keyframes nudge{0%,100%{transform:translateY(calc(-3 * var(--u)))}50%{transform:translateY(calc(4 * var(--u)))}}
+@keyframes nudge{0%,100%{transform:translateY(calc(-1.5 * var(--u)))}50%{transform:translateY(calc(2.5 * var(--u)))}}
 
 /* ================= WORKS ================= */
 .works{position:relative;background:#fff;padding:calc(82 * var(--u)) calc(31.078 * var(--u)) calc(42 * var(--u))}
@@ -364,6 +365,10 @@ ol,ul{list-style:none}
   display:flex;gap:calc(6 * var(--u));height:calc(46 * var(--u));background:rgba(243,243,239,.95);border:1px solid #000;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   transform:translateY(140%);transition:transform .8s var(--ease-back) 2.6s}
 .ready .fnav,.ready~.fnav{transform:none}
+/* 처음엔 피그마처럼 히어로 오른쪽 아래(스크롤 배지 밑)에 붙어 있다가, 히어로를 지나면 화면 아래에 떠 있는 메뉴로 */
+.fnav.docked{position:absolute;top:calc(687 * var(--u));bottom:auto}
+.fnav.float-in{animation:fnavIn .55s var(--ease-back) both}
+@keyframes fnavIn{from{transform:translateY(140%)}to{transform:none}}
 .fnav a{display:flex;align-items:center;padding:0 calc(7 * var(--u)) 0 calc(13 * var(--u));font:400 calc(12 * var(--u))/calc(19.8 * var(--u)) var(--f-kr);color:#191919}
 .fnav a.on{background:var(--lime);color:#112e48;padding:0 calc(13 * var(--u))}
 

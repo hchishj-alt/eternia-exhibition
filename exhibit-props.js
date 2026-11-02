@@ -27,9 +27,9 @@ export function addExhibitProps(root,texture){
  box(chair,[.19,.13,.035],[0,.67,.125],black,.018,'체어_허리쿠션');box(chair,[.23,.19,.030],[0,.86,.13],gray,.014,'체어_등쿠션');box(chair,[.16,.09,.027],[0,1.11,.158],dark,.014,'체어_헤드쿠션');
  // Empty outerwear on a simple wall hanger: no body, mannequin or full costume.
  const coat=new T.Group();coat.name='NARIN_OUTER_화이트라임_후드재킷';coat.position.set(.635,0,-.365);coat.rotation.y=-Math.PI/3;root.add(coat);
- decal(coat,[0,1.16,.03],.60,.64,'coat-hanging.png',0,'아우터_이미지_옷걸이');
+ decal(coat,[0,1.16,.03],.60,.64,'coat-hanging.webp',0,'아우터_이미지_옷걸이');
  // A small white HEXABLOOM tumbler at the left corner of the desk.
- const cup=new T.Group();cup.name='HEXABLOOM_화이트텀블러';cup.position.set(-.735,.75,.13);cup.rotation.y=Math.PI/3;root.add(cup);cyl(cup,.031,.138,[0,.069,0],white,'텀블러_바디');cyl(cup,.033,.009,[0,.142,0],ivory,'텀블러_뚜껑');cyl(cup,.026,.003,[0,.148,0],dark,'텀블러_뚜껑인서트');decal(cup,[0,.075,.0315],.043,.030,'ui-hexabloom-mark.png',0,'텀블러_헥사블룸로고');
+ const cup=new T.Group();cup.name='HEXABLOOM_화이트텀블러';cup.position.set(-.735,.75,.13);cup.rotation.y=Math.PI/3;root.add(cup);cyl(cup,.031,.138,[0,.069,0],white,'텀블러_바디');cyl(cup,.033,.009,[0,.142,0],ivory,'텀블러_뚜껑');cyl(cup,.026,.003,[0,.148,0],dark,'텀블러_뚜껑인서트');decal(cup,[0,.075,.0315],.043,.030,'ui-hexabloom-mark.webp',0,'텀블러_헥사블룸로고');
  // Small sci-fi prop pistol, kept above its two-prong display stand on the desktop.
  const gun=new T.Group();gun.name='인게임_권총_데스크거치대';gun.position.set(-.48,.75,-.39);gun.rotation.y=Math.PI/3;root.add(gun);box(gun,[.17,.009,.072],[0,.0045,0],dark,.008,'권총_거치대바닥');for(const x of[-.045,.045]){rod(gun,[x,.009,0],[x,.052,0],.005,silver,'권총_거치봉');box(gun,[.018,.012,.035],[x,.051,0],ivory,.004,'권총_받침');}box(gun,[.132,.034,.038],[0,.085,0],white,.006,'권총_화이트배럴');box(gun,[.024,.031,.042],[.075,.085,0],ivory,.003,'권총_총구');box(gun,[.003,.018,.023],[.088,.085,0],black,.002,'권총_총구안쪽');const grip=box(gun,[.036,.060,.032],[-.042,.048,0],gray,.005,'권총_그립');grip.rotation.z=-.22;box(gun,[.035,.008,.041],[-.025,.107,0],lime,.002,'권총_연두패널');box(gun,[.055,.008,.040],[.034,.065,0],lime,.002,'권총_아래테이프');
 
