@@ -270,7 +270,13 @@
   if (R.queued) R.queued().forEach(g => gList.insertAdjacentHTML('afterbegin', entryHtml({ name: g.name, message: g.message, time: '방금' })));
   if (R.configured) {
     gStatus.textContent = '따뜻한 한마디를 남겨주세요. 남긴 글은 아래에 바로 보여요.';
-    R.load().then(res => { if (res && res.guestbook) gList.innerHTML = res.guestbook.map(entryHtml).join(''); });
+    R.load().then(res => {
+      if (!res || !res.guestbook) return;
+      // 방금 내가 남긴 글은 시트 반영(최대 몇 분)을 기다리지 않고 바로 보이게
+      let mine = []; try { mine = JSON.parse(localStorage.getItem('grad_gb_mine') || '[]'); } catch (e) {}
+      mine = mine.filter(m => Date.now() - m.at < 15 * 60 * 1000 && !res.guestbook.some(g => g.name === m.name && g.message === m.message));
+      gList.innerHTML = mine.reverse().map(m => entryHtml({ name: m.name, message: m.message, time: '방금' })).join('') + res.guestbook.map(entryHtml).join('');
+    });
   }
   $('#guestForm').addEventListener('submit', async e => {
     e.preventDefault();
@@ -282,6 +288,7 @@
     const res = await R.guestbook(name, msg, 'invitation');
     btn.disabled = false;
     if (res && res.ok) {
+      try { const mine = JSON.parse(localStorage.getItem('grad_gb_mine') || '[]'); mine.push({ name, message: msg, at: Date.now() }); localStorage.setItem('grad_gb_mine', JSON.stringify(mine.slice(-5))); } catch (e) {}
       gList.insertAdjacentHTML('afterbegin', entryHtml({ name, message: msg, time: '방금' }));
       gList.firstElementChild.classList.add('new');
       $('#gMsg').value = '';

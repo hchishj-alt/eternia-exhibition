@@ -8,7 +8,13 @@
  */
 (function () {
   'use strict';
-  var RECORD_URL = '';
+  /* 구글 폼으로 기록을 받고(쓰기), 응답 시트를 CSV로 읽어 옴(읽기). Apps Script 권한 없이 동작 */
+  var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc-yjfxjunhICA8z3XGYpK7-4Abj2v_yhRH-Rm-0xWy5q0QDg/formResponse';
+  var FORM_ENTRY = 'entry.1467654799';
+  var SHEET_CSV = 'https://docs.google.com/spreadsheets/d/1-8mWSMaEJUf_1IqdzUoMwVQ4oqoUSEBEVckebaYgi5M/pub?gid=1776921462&single=true&output=csv';
+  var RECORD_URL = FORM_URL;
+  var SITES = ['invitation', 'hwansang', 'eternia'];
+  var ACTIONS = ['view', 'heart', 'share', 'download', 'calendar', 'poster', 'instagram', 'open_work', 'map', 'copy_address', 'click'];
 
   var store = {
     get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -17,22 +23,68 @@
   var vid = store.get('grad_vid');
   if (!vid) { vid = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); store.set('grad_vid', vid); }
 
-  var listeners = [], lastStats = null, statsPromise = null;
+  var listeners = [], lastStats = null, statsPromise = null, lastRows = null, localExtra = [];
   function emit(stats) { if (!stats) return; lastStats = stats; listeners.forEach(function (fn) { try { fn(stats); } catch (e) {} }); }
 
+  function clip(v, n) { return String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, n); }
   function post(kind, data) {
-    if (!RECORD_URL) return Promise.resolve({ ok: false, error: 'not_configured' });
-    return fetch(RECORD_URL, {
-      method: 'POST', keepalive: true,
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ kind: kind, data: data || {}, vid: vid })
-    }).then(function (r) { return r.json(); }).then(function (res) { if (res && res.stats) emit(res.stats); return res; })
+    var payload = { k: kind, d: data || {}, v: vid };
+    var body = new URLSearchParams(); body.append(FORM_ENTRY, JSON.stringify(payload).slice(0, 2000));
+    localExtra.push({ time: new Date(), k: kind, d: payload.d, v: vid });
+    if (lastRows) emit(buildStats(lastRows.concat(localExtra)));
+    return fetch(FORM_URL, { method: 'POST', mode: 'no-cors', keepalive: true, body: body })
+      .then(function () { return { ok: true, stats: lastStats }; })
       .catch(function () { return { ok: false, error: 'network' }; });
   }
+
+  /* CSV 파서 (따옴표·줄바꿈 처리) */
+  function parseCSV(t) {
+    var rows = [], row = [], f = '', q = false;
+    for (var i = 0; i < t.length; i++) {
+      var c = t[i];
+      if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true;
+      else if (c === ',') { row.push(f); f = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+      else f += c;
+    }
+    if (f || row.length) { row.push(f); rows.push(row); }
+    return rows;
+  }
+  function toRecords(csv) {
+    return parseCSV(csv).slice(1).map(function (r) {
+      try { var p = JSON.parse(r[1] || '{}'); return { time: r[0], k: p.k, d: p.d || {}, v: p.v, hidden: !!(r[2] && r[2].trim()) }; } catch (e) { return null; }
+    }).filter(Boolean);
+  }
+  function buildStats(recs) {
+    var counts = {}; SITES.forEach(function (s) { counts[s] = {}; ACTIONS.forEach(function (a) { counts[s][a] = 0; }); });
+    var st = { counts: counts, guestbook: 0, lab: 0, eternia: 0 };
+    recs.forEach(function (r) {
+      if (r.k === 'event') {
+        var s = r.d.site, a = r.d.action;
+        if (counts[s] && counts[s][a] !== undefined) counts[s][a] += a === 'heart' ? Math.max(1, Math.min(50, parseInt(r.d.target, 10) || 1)) : 1;
+      } else if (st[r.k] !== undefined) st[r.k]++;
+    });
+    return st;
+  }
+  function fmtTime(t) {
+    var d = t instanceof Date ? t : null;
+    if (!d) { var m = String(t).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})\D+(오전|오후)?\s*(\d{1,2}):(\d{2})/); if (!m) return String(t).slice(5, 16);
+      var h = +m[5]; if (m[4] === '오후' && h < 12) h += 12; if (m[4] === '오전' && h === 12) h = 0;
+      return ('0' + m[2]).slice(-2) + '.' + ('0' + m[3]).slice(-2) + ' ' + ('0' + h).slice(-2) + ':' + m[6]; }
+    return ('0' + (d.getMonth() + 1)).slice(-2) + '.' + ('0' + d.getDate()).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  }
   function load() {
-    if (!RECORD_URL) return Promise.resolve(null);
-    if (!statsPromise) statsPromise = fetch(RECORD_URL + '?fn=stats').then(function (r) { return r.json(); })
-      .then(function (res) { if (res && res.stats) emit(res.stats); return res; })
+    if (!statsPromise) statsPromise = fetch(SHEET_CSV + '&t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw 0; return r.text(); })
+      .then(function (csv) {
+        lastRows = toRecords(csv);
+        var all = lastRows.concat(localExtra), stats = buildStats(all);
+        emit(stats);
+        var gb = lastRows.filter(function (r) { return r.k === 'guestbook' && !r.hidden && r.d.name && r.d.message; })
+          .slice(-40).reverse().map(function (r) { return { time: fmtTime(r.time), name: clip(r.d.name, 20), message: clip(r.d.message, 300), site: r.d.site }; });
+        return { ok: true, stats: stats, guestbook: gb, records: lastRows };
+      })
       .catch(function () { statsPromise = null; return null; });
     return statsPromise;
   }
@@ -124,7 +176,8 @@
     guestbook: function (name, message, site) { return post('guestbook', { name: name, message: message, site: site || 'invitation' }); },
     lab: function (d) { return post('lab', d); },
     queueGuestbook: queueGuestbook,
-    queued: function () { return RECORD_URL ? [] : queued(); },
+    queued: function () { return []; },
+    sheetCsv: SHEET_CSV,
     eternia: function (type, detail) { return post('eternia', { type: type, detail: detail }); },
     load: load,
     onStats: onStats,

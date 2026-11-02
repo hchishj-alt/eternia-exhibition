@@ -45,9 +45,8 @@
   <h1>졸업전시 기록 모아보기</h1>
 
   <div class="login">
-    <input id="url" placeholder="Apps Script 웹 앱 주소 (records/record.js 에 넣은 주소)">
-    <input id="key" placeholder="관리자 키" type="password" autocomplete="off">
-    <button id="loadBtn">불러오기</button>
+    <button id="loadBtn">기록 불러오기</button>
+    <a class="btn" href="https://docs.google.com/spreadsheets/d/1-8mWSMaEJUf_1IqdzUoMwVQ4oqoUSEBEVckebaYgi5M/edit" target="_blank" rel="noopener" style="background:#fff">구글 시트 열기 ↗</a>
     <button id="allJson" class="ghost" hidden>전체 JSON 저장</button>
   </div>
   <p class="msg" id="msg"></p>
@@ -64,25 +63,23 @@
   const $ = s => document.querySelector(s);
   const SITE = { invitation: '초대장', hwansang: '환상선택', eternia: 'ETERNIA' };
   const ACT = { view: '방문', heart: '하트', share: '공유', download: '초대장 저장', calendar: '일정 저장', poster: '포스터 보기', instagram: '인스타', open_work: '작품 열기', map: '지도', copy_address: '주소 복사', click: '버튼 클릭' };
-  const saved = k => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } };
-  $('#url').value = (window.GradRecord && window.GradRecord.url) || saved('grad_admin_url');
-  $('#key').value = saved('grad_admin_key');
   let data = null, current = 'guestbook';
-
   $('#loadBtn').addEventListener('click', load);
-  $('#key').addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
+  const SHEETS = { guestbook: ['방명록', ['시간', '사이트', '이름', '메시지', '방문자ID'], r => [r.d.site, r.d.name, r.d.message]],
+    lab: ['알고리즘랩', ['시간', '게시자 이름', '문장', '증폭 신호', '증폭 강도', '방문자ID'], r => [r.d.name, r.d.text, r.d.signal, r.d.intensity]],
+    eternia: ['이터니아', ['시간', '종류', '내용', '방문자ID'], r => [r.d.type, r.d.detail]],
+    event: ['반응', ['시간', '사이트', '행동', '대상', '방문자ID'], r => [r.d.site, r.d.action, r.d.target]] };
   async function load() {
-    const url = $('#url').value.trim(), key = $('#key').value.trim();
-    if (!url || !key) { $('#msg').textContent = '주소와 관리자 키를 넣어 주세요.'; return; }
     $('#msg').textContent = '불러오는 중…';
-    try {
-      const res = await fetch(url + '?fn=export&key=' + encodeURIComponent(key)).then(r => r.json());
-      if (!res.ok) { $('#msg').textContent = res.error === 'unauthorized' ? '관리자 키가 맞지 않아요.' : '불러오지 못했어요: ' + res.error; return; }
-      try { localStorage.setItem('grad_admin_url', url); localStorage.setItem('grad_admin_key', key); } catch (e) {}
-      data = res; render();
-      $('#msg').textContent = '불러왔어요 · ' + new Date().toLocaleString('ko-KR');
-    } catch (e) { $('#msg').textContent = '연결하지 못했어요. 주소를 확인해 주세요.'; }
+    const res = await window.GradRecord.load();
+    if (!res) { $('#msg').textContent = '불러오지 못했어요. 시트가 웹에 게시돼 있는지 확인해 주세요.'; return; }
+    const sheets = {};
+    Object.keys(SHEETS).forEach(k => { const [name, headers, pick] = SHEETS[k];
+      sheets[k] = { name, headers, rows: res.records.filter(r => r.k === k).map(r => [r.time, ...pick(r).map(v => v == null ? '' : v), r.v || '']) }; });
+    data = { stats: res.stats, sheets }; render();
+    $('#msg').textContent = '불러왔어요 · ' + new Date().toLocaleString('ko-KR') + ' (시트 반영까지 최대 5분 걸릴 수 있어요)';
   }
+  load();
 
   function render() {
     $('#dash').hidden = false; $('#allJson').hidden = false;
