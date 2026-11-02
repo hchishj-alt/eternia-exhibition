@@ -11,7 +11,11 @@
   /* 구글 폼으로 기록을 받고(쓰기), 응답 시트를 CSV로 읽어 옴(읽기). Apps Script 권한 없이 동작 */
   var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc-yjfxjunhICA8z3XGYpK7-4Abj2v_yhRH-Rm-0xWy5q0QDg/formResponse';
   var FORM_ENTRY = 'entry.1467654799';
-  var SHEET_CSV = 'https://docs.google.com/spreadsheets/d/1-8mWSMaEJUf_1IqdzUoMwVQ4oqoUSEBEVckebaYgi5M/pub?gid=1776921462&single=true&output=csv';
+  var SHEET_ID = '1-8mWSMaEJUf_1IqdzUoMwVQ4oqoUSEBEVckebaYgi5M', SHEET_GID = '1776921462';
+  // gviz: 거의 실시간(몇 초) / pub: 구글 캐시 때문에 최대 5분 지연. gviz 가 안 되면 pub 로
+  var LIVE_CSV = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&gid=' + SHEET_GID;
+  var SHEET_CSV = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/pub?gid=' + SHEET_GID + '&single=true&output=csv';
+  var useLive = true;
   var RECORD_URL = FORM_URL;
   var SITES = ['invitation', 'hwansang', 'eternia'];
   var ACTIONS = ['view', 'heart', 'share', 'download', 'calendar', 'poster', 'instagram', 'open_work', 'map', 'copy_address', 'click'];
@@ -51,8 +55,8 @@
     if (f || row.length) { row.push(f); rows.push(row); }
     return rows;
   }
-  function toRecords(csv) {
-    return parseCSV(csv).slice(1).map(function (r) {
+  function toRecords(rows) {
+    return rows.map(function (r) {
       try { var p = JSON.parse(r[1] || '{}'); return { time: r[0], k: p.k, d: p.d || {}, v: p.v, hidden: !!(r[2] && r[2].trim()) }; } catch (e) { return null; }
     }).filter(Boolean);
   }
@@ -69,24 +73,58 @@
   }
   function fmtTime(t) {
     var d = t instanceof Date ? t : null;
-    if (!d) { var m = String(t).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})\D+(오전|오후)?\s*(\d{1,2}):(\d{2})/); if (!m) return String(t).slice(5, 16);
+    if (!d) { var u = String(t).match(/^(\d{1,2})\/(\d{1,2})\/\d{4} (\d{1,2}):(\d{2})/); if (u) return ('0' + u[1]).slice(-2) + '.' + ('0' + u[2]).slice(-2) + ' ' + ('0' + u[3]).slice(-2) + ':' + u[4];
+      var m = String(t).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})\D+(오전|오후)?\s*(\d{1,2}):(\d{2})/); if (!m) return String(t).slice(5, 16);
       var h = +m[5]; if (m[4] === '오후' && h < 12) h += 12; if (m[4] === '오전' && h === 12) h = 0;
       return ('0' + m[2]).slice(-2) + '.' + ('0' + m[3]).slice(-2) + ' ' + ('0' + h).slice(-2) + ':' + m[6]; }
     return ('0' + (d.getMonth() + 1)).slice(-2) + '.' + ('0' + d.getDate()).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
   }
-  function load() {
-    if (!statsPromise) statsPromise = fetch(SHEET_CSV + '&t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw 0; return r.text(); })
+  /* gviz JSONP: CORS 상관없이 거의 실시간으로 읽힘 */
+  var jsonpN = 0;
+  function fetchLive() {
+    return new Promise(function (res, rej) {
+      var cb = '__grJ' + (jsonpN++), sc = document.createElement('script'), done = false;
+      var to = setTimeout(function () { fin(); rej(0); }, 8000);
+      function fin() { done = true; clearTimeout(to); try { delete window[cb]; } catch (e) { window[cb] = undefined; } sc.remove(); }
+      window[cb] = function (d) {
+        fin();
+        if (!d || d.status === 'error' || !d.table) return rej(0);
+        res(d.table.rows.map(function (r) { var c = r.c || []; var cell = function (i) { return c[i] ? (c[i].f || (c[i].v == null ? '' : String(c[i].v))) : ''; }; return [cell(0), cell(1), cell(2)]; }));
+      };
+      sc.onerror = function () { if (!done) { fin(); rej(0); } };
+      sc.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?gid=' + SHEET_GID + '&headers=1&tqx=responseHandler:' + cb + '&t=' + Date.now();
+      document.head.appendChild(sc);
+    });
+  }
+  function fetchCsv() {
+    if (useLive) return fetchLive().catch(function () { useLive = false; var p = fetchCsv(); useLive = true; return p; });
+    return fetch(SHEET_CSV + '&t=' + Math.floor(Date.now() / 30000), { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.text(); })
+      .then(function (t) { return parseCSV(t).slice(1); });
+  }
+  function load(force) {
+    if (force) statsPromise = null;
+    if (!statsPromise) statsPromise = fetchCsv()
       .then(function (csv) {
-        lastRows = toRecords(csv);
+        var recs = toRecords(csv);
+        // gviz 는 머리글/타임스탬프 형식이 조금 달라도 data 칸(JSON)만 읽으면 됨
+        lastRows = recs;
+        localExtra = localExtra.filter(function (x) { return !recs.some(function (r) { return r.v === x.v && JSON.stringify(r.d) === JSON.stringify(x.d); }); });
         var all = lastRows.concat(localExtra), stats = buildStats(all);
         emit(stats);
         var gb = lastRows.filter(function (r) { return r.k === 'guestbook' && !r.hidden && r.d.name && r.d.message; })
-          .slice(-40).reverse().map(function (r) { return { time: fmtTime(r.time), name: clip(r.d.name, 20), message: clip(r.d.message, 300), site: r.d.site }; });
+          .slice(-60).reverse().map(function (r) { return { time: fmtTime(r.time), name: clip(r.d.name, 20), message: clip(r.d.message, 300), site: r.d.site }; });
         return { ok: true, stats: stats, guestbook: gb, records: lastRows };
       })
       .catch(function () { statsPromise = null; return null; });
     return statsPromise;
+  }
+  /* 실시간: 화면이 보이는 동안 주기적으로 다시 읽음 */
+  function watch(fn, ms) {
+    var timer = null;
+    function tick() { if (document.hidden) return; load(true).then(function (res) { if (res) fn(res); }); }
+    timer = setInterval(tick, ms || 12000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
+    return function () { clearInterval(timer); };
   }
 
   /* ---------------- heart widget ---------------- */
@@ -180,6 +218,7 @@
     sheetCsv: SHEET_CSV,
     eternia: function (type, detail) { return post('eternia', { type: type, detail: detail }); },
     load: load,
+    watch: watch,
     onStats: onStats,
     mountHeart: mountHeart,
     /** 페이지 방문 1회 기록 (같은 탭에서 새로고침은 다시 세지 않음) */

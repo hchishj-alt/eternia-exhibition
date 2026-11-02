@@ -270,13 +270,21 @@
   if (R.queued) R.queued().forEach(g => gList.insertAdjacentHTML('afterbegin', entryHtml({ name: g.name, message: g.message, time: '방금' })));
   if (R.configured) {
     gStatus.textContent = '따뜻한 한마디를 남겨주세요. 남긴 글은 아래에 바로 보여요.';
-    R.load().then(res => {
+    let shown = '';
+    const paint = res => {
       if (!res || !res.guestbook) return;
-      // 방금 내가 남긴 글은 시트 반영(최대 몇 분)을 기다리지 않고 바로 보이게
+      // 방금 내가 남긴 글은 시트 반영을 기다리지 않고 바로 보이게
       let mine = []; try { mine = JSON.parse(localStorage.getItem('grad_gb_mine') || '[]'); } catch (e) {}
       mine = mine.filter(m => Date.now() - m.at < 15 * 60 * 1000 && !res.guestbook.some(g => g.name === m.name && g.message === m.message));
-      gList.innerHTML = mine.reverse().map(m => entryHtml({ name: m.name, message: m.message, time: '방금' })).join('') + res.guestbook.map(entryHtml).join('');
-    });
+      const list = mine.reverse().map(m => ({ name: m.name, message: m.message, time: '방금' })).concat(res.guestbook);
+      const key = list.map(g => g.name + '|' + g.message).join('\n');
+      if (key === shown) return;
+      const before = new Set(shown ? shown.split('\n') : []); shown = key;
+      gList.innerHTML = list.map(entryHtml).join('');
+      if (before.size) [...gList.children].forEach((li, i) => { const g = list[i]; if (!before.has(g.name + '|' + g.message)) li.classList.add('new'); });
+    };
+    R.load().then(paint);
+    if (R.watch) R.watch(paint, 12000);
   }
   $('#guestForm').addEventListener('submit', async e => {
     e.preventDefault();
