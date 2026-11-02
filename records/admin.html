@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>졸업전시 기록 모아보기</title>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Noto+Sans+KR:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--lime:#dfff00;--ink:#191919;--paper:#f3f3ef;--line:rgba(34,34,34,.2)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font:400 14px/1.6 'Noto Sans KR',system-ui,sans-serif;padding:24px 16px 60px}
+  .wrap{max-width:1100px;margin:0 auto}
+  .k{font:400 11px/1.4 Audiowide,sans-serif;letter-spacing:1.4px;color:#555}
+  h1{font:700 28px/1.2 'Noto Sans KR';letter-spacing:-1px;margin:6px 0 18px}
+  .login{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:16px;background:#fff;border:1px solid #000}
+  input{height:44px;padding:0 12px;border:1px solid #777;background:#fff;font:inherit;min-width:0}
+  #url{flex:1 1 360px} #key{flex:0 1 160px}
+  button,.btn{height:44px;padding:0 16px;border:1px solid #000;background:var(--lime);font:500 13px/42px 'Noto Sans KR';cursor:pointer;color:var(--ink);text-decoration:none;display:inline-block}
+  button.ghost{background:#fff}
+  .msg{margin-top:10px;font-size:13px;color:#466680;min-height:20px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:22px 0}
+  .card{background:#fff;border:1px solid var(--line);padding:14px}
+  .card .n{font:500 30px/1.1 'Space Grotesk';margin-top:4px}
+  .card.site{grid-column:span 2;min-width:0}
+  .card.site table{width:100%;margin-top:8px;font:500 13px/1.8 'Space Grotesk'}
+  .card.site td:last-child{text-align:right}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:24px 0 0}
+  .tabs button{background:#fff}.tabs button.on{background:var(--ink);color:#fff}
+  .panel{background:#fff;border:1px solid #000;border-top:0;padding:14px;overflow:auto}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+  .bar input{flex:1 1 200px;height:38px}
+  .bar button,.bar .btn{height:38px;line-height:36px}
+  table.data{border-collapse:collapse;width:100%;font-size:13px}
+  table.data th,table.data td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  table.data th{position:sticky;top:0;background:var(--lime);font-weight:500;white-space:nowrap}
+  table.data td{max-width:420px;white-space:pre-wrap;word-break:break-all}
+  .empty{padding:30px;text-align:center;color:#888}
+  @media (max-width:600px){.card.site{grid-column:span 1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="k">HAJIN KIM / GRAD SHOW RECORDS</p>
+  <h1>졸업전시 기록 모아보기</h1>
+
+  <div class="login">
+    <input id="url" placeholder="Apps Script 웹 앱 주소 (records/record.js 에 넣은 주소)">
+    <input id="key" placeholder="관리자 키" type="password" autocomplete="off">
+    <button id="loadBtn">불러오기</button>
+    <button id="allJson" class="ghost" hidden>전체 JSON 저장</button>
+  </div>
+  <p class="msg" id="msg"></p>
+
+  <section id="dash" hidden>
+    <div class="cards" id="cards"></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="panel" id="panel"></div>
+  </section>
+</div>
+<script src="record.js"></script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const SITE = { invitation: '초대장', hwansang: '환상선택', eternia: 'ETERNIA' };
+  const ACT = { view: '방문', heart: '하트', share: '공유', download: '초대장 저장', calendar: '일정 저장', poster: '포스터 보기', instagram: '인스타', open_work: '작품 열기', map: '지도', copy_address: '주소 복사', click: '버튼 클릭' };
+  const saved = k => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } };
+  $('#url').value = (window.GradRecord && window.GradRecord.url) || saved('grad_admin_url');
+  $('#key').value = saved('grad_admin_key');
+  let data = null, current = 'guestbook';
+
+  $('#loadBtn').addEventListener('click', load);
+  $('#key').addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
+  async function load() {
+    const url = $('#url').value.trim(), key = $('#key').value.trim();
+    if (!url || !key) { $('#msg').textContent = '주소와 관리자 키를 넣어 주세요.'; return; }
+    $('#msg').textContent = '불러오는 중…';
+    try {
+      const res = await fetch(url + '?fn=export&key=' + encodeURIComponent(key)).then(r => r.json());
+      if (!res.ok) { $('#msg').textContent = res.error === 'unauthorized' ? '관리자 키가 맞지 않아요.' : '불러오지 못했어요: ' + res.error; return; }
+      try { localStorage.setItem('grad_admin_url', url); localStorage.setItem('grad_admin_key', key); } catch (e) {}
+      data = res; render();
+      $('#msg').textContent = '불러왔어요 · ' + new Date().toLocaleString('ko-KR');
+    } catch (e) { $('#msg').textContent = '연결하지 못했어요. 주소를 확인해 주세요.'; }
+  }
+
+  function render() {
+    $('#dash').hidden = false; $('#allJson').hidden = false;
+    const st = data.stats, c = st.counts;
+    let html = `<div class="card"><p class="k">GUESTBOOK</p><p class="n">${st.guestbook}</p><p>방명록 글</p></div>
+      <div class="card"><p class="k">ALGORITHM LAB</p><p class="n">${st.lab}</p><p>알고리즘랩 문장</p></div>
+      <div class="card"><p class="k">ETERNIA</p><p class="n">${st.eternia}</p><p>이터니아 체험 기록</p></div>`;
+    Object.keys(SITE).forEach(s => {
+      const rows = Object.keys(ACT).filter(a => c[s] && c[s][a]).map(a => `<tr><td>${ACT[a]}</td><td>${c[s][a]}</td></tr>`).join('') || '<tr><td>아직 기록 없음</td><td></td></tr>';
+      html += `<div class="card site"><p class="k">${s.toUpperCase()}</p><b>${SITE[s]}</b><table>${rows}</table></div>`;
+    });
+    $('#cards').innerHTML = html;
+    $('#tabs').innerHTML = Object.keys(data.sheets).map(k => `<button data-k="${k}" class="${k === current ? 'on' : ''}">${data.sheets[k].name} (${data.sheets[k].rows.length})</button>`).join('');
+    document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => { current = b.dataset.k; render(); });
+    renderTable();
+  }
+  function renderTable(filter = '') {
+    const sh = data.sheets[current];
+    const rows = sh.rows.slice().reverse().filter(r => !filter || r.join(' ').toLowerCase().includes(filter.toLowerCase()));
+    const esc = t => String(t).replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+    $('#panel').innerHTML = `<div class="bar"><input id="q" placeholder="검색" value="${esc(filter)}"><button id="csv">CSV(엑셀) 저장</button></div>` +
+      (rows.length ? `<table class="data"><thead><tr>${sh.headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(v => `<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '<p class="empty">아직 기록이 없어요.</p>');
+    const q = $('#q'); q.oninput = () => { renderTable(q.value); const n = $('#q'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
+    $('#csv').onclick = () => {
+      const cell = v => '"' + String(v).replace(/"/g, '""') + '"';
+      const csv = '﻿' + [sh.headers, ...sh.rows].map(r => r.map(cell).join(',')).join('\r\n');
+      download(new Blob([csv], { type: 'text/csv;charset=utf-8' }), `졸업전시_${sh.name}_${today()}.csv`);
+    };
+  }
+  $('#allJson').onclick = () => download(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }), `졸업전시_기록전체_${today()}.json`);
+  const today = () => new Date().toISOString().slice(0, 10);
+  function download(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }
+})();
+</script>
+</body>
+</html>
