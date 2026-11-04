@@ -44,7 +44,7 @@
 
 ## 졸업전시 모바일 초대장 (`invitation/`)
 - 주소: `https://아이디.github.io/저장소이름/invitation/`
-- 작품 카드를 누르면 같은 저장소의 사이트가 화면 위로 바로 열립니다. ETERNIA → `index.html`, 환상선택 → `hwansang/index.html`(환상선택 사이트 복사본).
+- 작품 카드를 누르면 같은 저장소의 사이트가 화면 위로 바로 열립니다. ETERNIA → `index.html`, 환상선택 → 독립 사이트 https://hchishj-alt.github.io/hwanshangchoice/ (`hwansang/` 는 옛 주소용 이동 안내만 남김).
 - 링크 뒤에 `#eternia` / `#hwansang`을 붙이면 해당 작품이 바로 열린 상태로 시작합니다.
 - 스타일은 `invite.src.css`를 고친 뒤 `invite.css`로 변환해 쓰는 구조입니다(피그마 518px 기준 → 화면 폭에 맞춰 자동 축소). 간단한 수정은 `invite.css`를 직접 고쳐도 됩니다.
 - 공식 포스터: `invitation/assets/poster.jpg`를 넣으면 "공식 전시 포스터 보기"가 나타납니다(없으면 숨김).

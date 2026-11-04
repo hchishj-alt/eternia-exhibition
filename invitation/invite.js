@@ -8,7 +8,7 @@
   // 깃허브 Pages 주소가 생기면 url을 그 주소(https://…)로 바꿔도 됩니다.
   const WORKS = {
     eternia:  { title: '01 / ETERNIA',  url: 'https://hchishj-alt.github.io/eternia-exhibition/', needsServer: true },
-    hwansang: { title: '02 / 환상선택', url: '../hwansang/index.html' }
+    hwansang: { title: '02 / 환상선택', url: 'https://hchishj-alt.github.io/hwanshangchoice/' }   // 환상선택은 독립 사이트 (hwanshangchoice 저장소)
   };
 
   /* ---------- text splitting ---------- */
