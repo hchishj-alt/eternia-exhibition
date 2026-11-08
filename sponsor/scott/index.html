@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta property="og:title" content="ETERNIA 졸업전시 초대장">
+<meta property="og:description" content="이터니아의 세계로 당신을 초대합니다 · 2026.11.11–11.15 홍익대 대학로 아트센터 B1">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>ETERNIA Invitation · SCOTT HAMISH</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Saira:wght@300;400;500;600&display=swap">
+<style>
+@font-face{font-family:"PretendardSub";font-weight:400;font-display:swap;src:url(../fonts/pre-400.woff2) format("woff2")}
+@font-face{font-family:"PretendardSub";font-weight:600;font-display:swap;src:url(../fonts/pre-600.woff2) format("woff2")}
+@font-face{font-family:"PretendardSub";font-weight:800;font-display:swap;src:url(../fonts/pre-800.woff2) format("woff2")}
+
+/* Layout: a game-UI "mission log" in deep station navy. Full-bleed key art, then quiet panels with cut corners,
+   lime used only as a signal colour (highlights, seals, active states). Single committed dark look. */
+:root{
+  --void:#10111c;      /* page ground: space between panels */
+  --navy:#232549;      /* Hajin's deep blue: panels, letter seal ink */
+  --panel:#1a1b2c;     /* raised surfaces */
+  --line:#34365c;      /* hairlines */
+  --ink:#eef0f8;       /* primary text */
+  --mute:#9a9dbb;      /* secondary text */
+  --lime:#d8f24c;      /* ETERNIA signal lime */
+  --sky:#8ec5ff;       /* station glass blue */
+  --paper:#f4f5fa;     /* letter paper */
+  --paper-ink:#232549;
+  --f-kr:"PretendardSub","Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --f-hud:"Saira Condensed","Arial Narrow",sans-serif;
+  --f-wide:"Saira","Segoe UI",sans-serif;
+  --cut:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--ink);font-family:var(--f-kr);word-break:keep-all;overflow-wrap:break-word;font-size:16px;line-height:1.7;letter-spacing:-.01em;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.hud{font-family:var(--f-hud);text-transform:uppercase;letter-spacing:.14em;font-weight:600}
+.eyebrow{display:flex;align-items:center;gap:12px;font-family:var(--f-hud);font-weight:600;letter-spacing:.2em;font-size:14px;color:var(--lime);text-transform:uppercase}
+.eyebrow::before{content:"";width:10px;height:10px;background:var(--lime);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+h2{font-size:clamp(30px,4.6vw,52px);line-height:1.22;font-weight:800;letter-spacing:-.035em;margin:18px 0 0;text-wrap:balance}
+h2 em{font-style:normal;color:var(--lime)}
+.lede{color:var(--mute);max-width:36em;margin:20px 0 0;font-size:17px}
+section{padding-block:clamp(88px,12vw,150px)}
+
+/* ============ INTRO ============ */
+#intro{position:fixed;inset:0;z-index:50;display:grid;place-items:center;overflow:hidden;
+  background:radial-gradient(120% 80% at 50% 110%,#2b2f6e 0%,#15163a 42%,#090a14 80%);transition:opacity 1s ease,visibility 1s}
+#intro.gone{opacity:0;visibility:hidden}
+#stars{position:absolute;inset:0;width:100%;height:100%}
+.intro-skip{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:3;background:none;border:1px solid #ffffff33;color:#ffffffaa;font-family:var(--f-hud);letter-spacing:.2em;font-size:12px;padding:8px 14px;cursor:pointer}
+.intro-logo{position:absolute;top:calc(9vh + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(46vw,220px);opacity:.85;transition:opacity .8s,transform .8s}
+.stage{position:relative;width:min(86vw,420px);aspect-ratio:1.32;z-index:2}
+.env{position:absolute;inset:0}
+.env>*{transition:transform 1s cubic-bezier(.6,0,.3,1),opacity .7s ease}
+.env-back{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,#2e3166,#1d1f45);border-radius:6px;box-shadow:0 40px 80px #0009,0 0 0 1px #ffffff14 inset}
+.env-front{position:absolute;inset:0;z-index:4;border-radius:6px;background:linear-gradient(170deg,#262959,#1a1c46);
+  clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:4.5%}
+.env-to{font-family:var(--f-wide);font-weight:300;color:#dfe3ff;font-size:13px;letter-spacing:.3em;text-align:center;line-height:1.4}
+.env-to b{display:block;font-family:var(--f-kr);font-weight:600;font-size:clamp(19px,5.4vw,25px);letter-spacing:-.01em;color:#fff}
+.flap{position:absolute;left:0;right:0;top:0;height:66%;z-index:5;transform-origin:top;transition:transform .6s cubic-bezier(.5,0,.3,1),z-index 0s .3s,opacity .7s ease;
+  background:linear-gradient(180deg,#454a9c,#2f3375);clip-path:polygon(0 0,100% 0,50% 100%)}
+.seal{position:absolute;left:50%;top:60%;z-index:6;width:44px;height:50px;border:0;padding:0;transform:translate(-50%,-50%);display:grid;place-items:center;
+  background:var(--lime);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);transition:transform .5s,opacity .5s;cursor:pointer}
+.seal span{font-family:var(--f-wide);font-weight:300;font-size:21px;color:var(--navy);line-height:1}
+.seal::after{content:"";position:absolute;inset:6px;clip-path:inherit;border:0;box-shadow:0 0 0 2px var(--navy) inset;background:transparent}
+.tap{position:absolute;left:50%;bottom:-64px;transform:translateX(-50%);white-space:nowrap;font-family:var(--f-hud);letter-spacing:.3em;font-size:13px;color:var(--lime);animation:blink 2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.35}}
+
+/* letter: 4 folded panels that cascade open */
+.lmask{position:fixed;left:0;right:0;top:0;height:var(--mh,50vh);overflow:hidden;z-index:3;pointer-events:none;transition:height 1s cubic-bezier(.45,0,.2,1)}
+.letter{position:absolute;left:var(--lx,6%);width:var(--lw,88%);top:var(--ly,6%);background:var(--paper);color:var(--paper-ink);border-radius:4px;text-align:center;pointer-events:auto;
+  box-shadow:0 20px 50px #0007;transition:transform .9s cubic-bezier(.45,0,.2,1);will-change:transform}
+.fold{padding:14px 22px}
+.fold+.fold{border-top:1px dashed #23254922}
+.letter .f1{padding-top:22px}
+.letter .f4{padding-bottom:24px}
+/* keep every intro layer composited from the start: avoids the letter vanishing when layers re-squash mid-animation */
+.env>*,.lmask{will-change:transform}
+.f1 .to{font-family:var(--f-wide);font-size:13px;letter-spacing:.24em;color:#6b6fa3}
+.f1 .who{font-weight:800;font-size:clamp(20px,5.6vw,26px);letter-spacing:-.02em}
+.f2 img{width:58%;margin:4px auto;filter:brightness(0) saturate(100%) invert(14%) sepia(22%) saturate(2300%) hue-rotate(216deg)}
+.f3 .big{font-weight:800;font-size:clamp(22px,6.4vw,32px);line-height:1.3;letter-spacing:-.04em}
+.f3 .big span{background:linear-gradient(transparent 60%,var(--lime) 60%)}
+.f4 .when{font-family:var(--f-hud);font-size:15px;letter-spacing:.14em;color:#565a8c}
+.enter{margin-top:12px;font:inherit;font-family:var(--f-hud);font-weight:700;letter-spacing:.24em;font-size:15px;color:var(--lime);background:var(--navy);border:0;padding:12px 26px;cursor:pointer;clip-path:var(--cut)}
+#intro.open .flap{transform:scaleY(-1);z-index:2}
+#intro.open .seal{transform:translate(-50%,-50%) scale(1.5);opacity:0}
+#intro.open .tap{opacity:0;animation:none}
+#intro.lift .letter{transform:translate3d(0,var(--lift,-60%),0)}
+#intro.unfold .lmask{height:100%;z-index:7}
+#intro.unfold .env>*{transform:translate3d(0,70%,0);opacity:0}
+#intro.unfold .letter{transform:translate3d(0,var(--center,-30%),0);transition-duration:1s}
+#intro.unfold .intro-logo{opacity:0;transform:translate(-50%,-20px)}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:min(92vh,900px);display:flex;align-items:flex-end;padding-block:0 clamp(40px,7vw,80px);overflow:hidden;isolation:isolate}
+.hero{background:radial-gradient(80% 90% at 85% 25%,#3b6cc4 0%,#203a86 40%,#151735 75%,var(--void) 100%)}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:55% 22%;z-index:-2}
+.hero-logo{width:clamp(180px,24vw,320px);margin-bottom:22px;filter:drop-shadow(0 4px 20px #0b1a4a88)}
+@media (min-width:900px){.hero>img{left:auto;width:min(60%,980px);object-position:50% 20%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 45%);mask-image:linear-gradient(90deg,transparent 0,#000 45%)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#10111c66 0%,transparent 22%,transparent 40%,#10111cd9 74%,var(--void) 100%)}
+.hero .wrap{width:100%}
+.hero-top{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));left:0;right:0}
+.hero-top .wrap{display:flex;justify-content:space-between;gap:16px;font-family:var(--f-hud);letter-spacing:.2em;font-size:13px;color:#fff}
+.hero-top b{color:var(--lime);font-weight:600}
+.hero-to{font-family:var(--f-wide);font-weight:300;letter-spacing:.18em;font-size:14px;color:#e6e9ff;text-transform:uppercase}
+.hero h1{margin:10px 0 0;font-size:clamp(34px,6.4vw,74px);line-height:1.12;font-weight:800;letter-spacing:-.045em;text-wrap:balance;max-width:12em;text-shadow:0 4px 30px #0b0c2a88}
+.hero h1 em{font-style:normal;color:var(--lime)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;font-family:var(--f-hud);letter-spacing:.12em;font-size:15px;color:#d8dcf5}
+.hero-meta .kr{font-style:normal;font-family:var(--f-kr);letter-spacing:-.01em;font-weight:500}
+.hero-meta span b{color:#fff;font-weight:700;margin-right:8px}
+
+/* ============ LETTER ============ */
+.letter-sec{padding-top:40px}
+.paper{position:relative;max-width:760px;margin:0 auto;background:var(--paper);color:var(--paper-ink);padding:clamp(36px,7vw,72px) clamp(24px,7vw,80px);clip-path:var(--cut)}
+.paper .to{font-family:var(--f-wide);letter-spacing:.24em;font-size:13px;color:#6b6fa3}
+.paper .who{font-size:clamp(24px,4vw,32px);font-weight:800;letter-spacing:-.03em;margin:4px 0 28px}
+.paper p{margin:0 0 1.1em;font-size:17px;line-height:1.95;max-width:34em}
+.paper .sign{margin-top:36px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.paper .sign small{display:block;font-family:var(--f-hud);font-size:13px;color:#6b6fa3;letter-spacing:.2em}
+.paper .sign strong{font-family:var(--f-wide);font-weight:500;font-size:13px;letter-spacing:.22em}
+.paper-seal{position:absolute;right:clamp(20px,5vw,48px);top:clamp(24px,5vw,44px);width:54px;height:62px;display:grid;place-items:center;background:var(--navy);
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);font-family:var(--f-wide);font-weight:300;color:var(--lime);font-size:26px}
+
+/* ============ WORLD / GALLERY ============ */
+.world-head{display:grid;grid-template-columns:1fr;gap:12px}
+.loop{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:44px;border:1px solid var(--line);background:var(--panel)}
+.loop div{padding:16px 18px;border-left:1px solid var(--line);min-width:0}
+.loop div:first-child{border-left:0;box-shadow:0 -3px 0 var(--lime) inset}
+.loop small{display:block;font-family:var(--f-hud);letter-spacing:.14em;font-size:12px;color:var(--mute)}
+.loop b{font-size:16px;font-weight:600}
+.shots{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;margin-top:20px}
+.shot{position:relative;margin:0;overflow:hidden;background:var(--panel);clip-path:var(--cut)}
+.shot img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/9;transition:transform 1.2s cubic-bezier(.2,.6,.2,1)}
+.shot:hover img{transform:scale(1.035)}
+.shot figcaption{position:absolute;left:0;bottom:0;right:0;padding:40px 20px 16px;background:linear-gradient(transparent,#0c0d18e6);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.shot figcaption .hud{font-size:12px;color:var(--lime)}
+.shot figcaption span:last-child{font-size:15px;font-weight:600}
+.s-wide{grid-column:span 12}
+.s-half{grid-column:span 6}
+
+/* ============ BOOTH ============ */
+.booth{background:linear-gradient(180deg,var(--void),#171936 30%,#171936 70%,var(--void))}
+.booth-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,64px);align-items:center;margin-top:48px}
+.booth-hero{position:relative;background:radial-gradient(70% 60% at 50% 55%,#e8f0ff 0%,#c9d8f5 55%,#a9bce6 100%);clip-path:var(--cut);display:grid;place-items:center;padding:28px;aspect-ratio:1}
+.booth-hero img{width:82%;mix-blend-mode:multiply}
+.booth-hero .tag{position:absolute;left:18px;top:16px;color:var(--navy);font-size:12px}
+.spec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:28px}
+.spec div{background:var(--panel);padding:16px 18px}
+.spec small{display:block;color:var(--mute);font-family:var(--f-hud);letter-spacing:.14em;font-size:12px}
+.spec b{font-family:var(--f-hud);font-size:26px;font-weight:700;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.spec b i{font-style:normal;font-size:14px;color:var(--mute);margin-left:3px}
+.dp{margin-top:56px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(24px,5vw,56px);align-items:center}
+.dp-img{background:#e9eaf0;clip-path:var(--cut)}
+.dp-img img{width:100%}
+.dp h3,.booth h3{font-size:clamp(22px,2.8vw,30px);font-weight:800;letter-spacing:-.03em;line-height:1.35;margin:12px 0 0}
+.dp h3 em{font-style:normal;color:var(--lime)}
+.dp p,.booth-copy p{color:var(--mute);margin:14px 0 0}
+.plan{margin-top:56px;background:#f3f5fa;clip-path:var(--cut);padding:clamp(12px,3vw,28px)}
+.plan img{width:100%}
+
+/* ============ INFO ============ */
+.info{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);margin-top:48px}
+.date-card{background:var(--navy);clip-path:var(--cut);padding:clamp(28px,4vw,44px);position:relative;overflow:hidden}
+.date-card::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:270px;border:1px solid #ffffff1c;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:radial-gradient(#d8f24c14,transparent 70%)}
+.dates{display:flex;align-items:flex-end;gap:14px;margin-top:14px}
+.dates .d{font-family:var(--f-hud);font-weight:800;font-size:clamp(46px,6.2vw,84px);line-height:.9;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.dates .d small{display:block;font-size:14px;font-weight:600;letter-spacing:.24em;color:var(--sky);margin-top:10px}
+.dates .dash{width:36px;height:4px;background:var(--lime);margin-bottom:46px}
+.rows{margin-top:30px;border-top:1px solid #ffffff22}
+.row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;padding:14px 0;border-bottom:1px solid #ffffff22;align-items:baseline}
+.row .hud{font-size:13px;color:var(--lime)}
+.row span:last-child{font-size:17px;font-weight:600}
+.nw{white-space:nowrap}
+.row small{display:block;font-size:14px;color:var(--mute);font-weight:400}
+.map{background:var(--panel);clip-path:var(--cut);display:flex;flex-direction:column}
+.map svg{width:100%;height:auto;display:block}
+.map-body{padding:22px clamp(20px,3vw,32px) 28px;display:grid;gap:14px}
+.addr{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.addr b{font-size:17px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font:inherit;font-size:14px;font-weight:600;color:var(--ink);background:transparent;border:1px solid var(--line);padding:10px 16px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.btn:hover{border-color:var(--lime);color:var(--lime)}
+.btn.lime{background:var(--lime);color:var(--navy);border-color:var(--lime)}
+.transit{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.transit li{display:flex;gap:12px;align-items:center;font-size:15px}
+.line-badge{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-hud);font-weight:700;font-size:14px;color:#fff}
+
+/* ============ CREDITS ============ */
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:48px}
+.member{background:var(--panel);clip-path:var(--cut);display:flex;flex-direction:column}
+.member .ph{aspect-ratio:4/4.6;overflow:hidden;background:#dfe2ec}
+.member .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.member .body{padding:18px 18px 22px;display:grid;gap:10px}
+.member h3{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.member h3 small{display:block;width:100%;margin-top:2px;font-family:var(--f-hud);font-size:12px;letter-spacing:.14em;color:var(--lime);font-weight:600}
+.member ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.member li{font-size:14px;color:#c9cce2;padding-left:14px;position:relative;line-height:1.55}
+.member li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;background:var(--lime)}
+.group{margin-top:72px}
+.group-title{display:flex;align-items:baseline;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.group-title .hud{color:var(--lime);font-size:14px}
+.group-title span:last-child{color:var(--mute);font-size:15px}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
+.item{display:grid;grid-template-columns:minmax(0,1fr);gap:4px 20px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
+.item.has-logo{grid-template-columns:112px minmax(0,1fr)}
+.item .nm{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.item .org{font-size:14px;color:var(--mute)}
+.item .role{font-size:14px;color:#c9cce2;grid-column:1/-1}
+.item.has-logo .nm,.item.has-logo .org,.item.has-logo .role{grid-column:2}
+.logo-chip{grid-row:span 3;width:112px;height:64px;background:transparent;border:1px solid var(--line);display:grid;place-items:center;padding:8px 10px;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.logo-chip img{width:100%;height:100%;max-width:100%;object-fit:contain}
+.logo-chip.word{font-family:var(--f-hud);font-weight:700;color:#fff;letter-spacing:.04em;font-size:14px;text-align:center;line-height:1.1}
+
+.sponsors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+.sp{position:relative;background:var(--panel);clip-path:var(--cut);padding:36px 28px;display:grid;gap:6px;justify-items:start}
+.sp .mark-img{height:clamp(44px,6vw,64px);width:auto;margin-bottom:10px}
+.sp .mark{font-family:var(--f-wide);font-weight:500;font-size:clamp(24px,3.4vw,36px);letter-spacing:.06em}
+.sp .kr{color:var(--mute);font-size:15px}
+.sp .what{font-size:14px;color:#c9cce2;margin-top:8px}
+.sp.you{background:var(--navy);box-shadow:0 0 0 1px var(--lime) inset}
+.sp.you::before{content:"WITH YOU";position:absolute;top:16px;right:20px;font-family:var(--f-hud);letter-spacing:.24em;font-size:12px;color:var(--navy);background:var(--lime);padding:3px 10px}
+
+/* ============ FOOTER ============ */
+footer{position:relative;overflow:hidden;padding-block:120px 80px;text-align:center;isolation:isolate}
+footer>img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.42}
+footer::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(var(--void),#10111c99 40%,#10111cdd)}
+footer .logo{width:min(70vw,300px);margin:0 auto}
+footer p{margin:22px auto 0;max-width:30em;color:#d6d9ee}
+footer small{display:block;margin-top:36px;color:var(--mute);font-size:13px;letter-spacing:.04em}
+
+/* mission log rail (desktop) */
+.rail{position:fixed;right:max(18px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);z-index:20;display:grid;gap:4px;font-family:var(--f-hud);font-size:13px;letter-spacing:.1em}
+.rail a{text-decoration:none;color:var(--mute);display:flex;justify-content:flex-end;align-items:center;gap:0;cursor:pointer}
+.rail .rn{display:inline-block;min-width:38px;text-align:center;padding:5px 8px;transition:color .3s,background .3s,transform .3s}
+.rail .rl{font-family:var(--f-kr);font-size:13px;letter-spacing:0;color:var(--ink);white-space:nowrap;max-width:0;overflow:hidden;opacity:0;padding:5px 0;background:#1a1b2ce6;transition:max-width .35s cubic-bezier(.2,.6,.2,1),opacity .3s,padding .35s}
+.rail a:hover .rl,.rail a:focus-visible .rl{max-width:120px;opacity:1;padding:5px 12px}
+.rail a:hover .rn{color:var(--lime);transform:translateX(-2px)}
+.rail a.on .rn{background:var(--lime);color:var(--navy)}
+.rail a.on:hover .rn{color:var(--navy)}
+.rail-title{writing-mode:vertical-rl;justify-self:end;color:#ffffff55;letter-spacing:.3em;font-size:12px;margin-bottom:14px}
+
+
+/* dossier letter: Hajin's in-game file UI, text laid on the paper */
+.dossier{position:relative;container-type:inline-size;max-width:1080px;margin:0 auto}
+.dossier .frame{position:relative;z-index:1;width:100%}
+.dossier .pol{position:absolute;z-index:2;left:4.3%;top:6.7%;width:31.3%;height:66.4%}
+.dossier .collab{position:absolute;left:16%;right:16%;top:12%;bottom:14%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2cqw;transform:rotate(-3deg)}
+.dossier .collab img{width:80%;max-height:30%;object-fit:contain}
+.dossier .collab span{font-family:var(--f-wide);font-weight:300;color:var(--lime);font-size:2.6cqw;line-height:1}
+.dossier .page{position:absolute;z-index:2;left:40%;top:6.5%;width:51%;height:62%;color:var(--paper-ink);display:flex;flex-direction:column;justify-content:center;padding:0 4cqw}
+.dossier .to{font-family:var(--f-wide);letter-spacing:.24em;font-size:clamp(10px,1.2cqw,13px);color:#6b6fa3}
+.dossier .who{font-weight:800;font-size:clamp(16px,3.1cqw,32px);letter-spacing:-.03em;line-height:1.25;margin-top:.3em;word-break:keep-all}
+.dossier .body p{margin:0 0 .8em;font-size:1.42cqw;line-height:1.75}
+.dossier .body{margin-top:1.6cqw}
+.dossier .pocket{position:absolute;z-index:2;left:52%;top:78%;width:40%;display:flex;align-items:baseline;gap:1cqw;color:#fff}
+.dossier .pocket .hud{color:var(--lime);font-size:.9cqw}
+.dossier .pocket b{font-family:var(--f-wide);font-size:1.15cqw;font-weight:500;letter-spacing:.24em}
+.narrow-only{margin-top:20px}
+.dossier .wide-only{display:none}
+@container (min-width:900px){ .dossier .wide-only{display:block} .dossier .pocket.wide-only{display:grid} .dossier .who{font-size:2.4cqw} }
+@media (min-width:980px){ .narrow-only{display:none} }
+/* polaroid team photos */
+.member{background:none;clip-path:none;overflow:visible}
+.member .ph{position:relative;aspect-ratio:auto;overflow:visible;background:#f4f5fa;padding:8px 8px 34px;box-shadow:0 18px 30px #0007;transform:rotate(-1.4deg)}
+.member:nth-child(even) .ph{transform:rotate(1.2deg)}
+.member .ph img{aspect-ratio:4/4.4;height:auto}
+.member .ph::after{content:"";position:absolute;top:-10px;left:50%;width:64px;height:20px;transform:translateX(-50%) rotate(-3deg);background:#d8f24ccc}
+.member .ph .no{position:absolute;left:12px;bottom:9px;font-family:var(--f-hud);letter-spacing:.2em;font-size:12px;color:#565a8c}
+.member .body{padding:22px 4px 0}
+
+
+.bt-hero{margin:48px 0 0;position:relative;background:#14152a;clip-path:var(--cut)}
+.bt-hero img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.bt-hero figcaption{position:absolute;left:clamp(14px,3vw,28px);bottom:clamp(14px,3vw,28px);display:flex;flex-wrap:wrap;gap:8px}
+.bt-hero figcaption span{font-size:13px;font-weight:600;padding:6px 12px;background:#10111ccc;border:1px solid var(--line);color:var(--ink)}
+.route{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.stop{background:var(--panel);clip-path:var(--cut);display:flex;flex-direction:column}
+.stop-img{position:relative;background:#14152a}
+.stop-img img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.stop-body{padding:22px 22px 26px;display:grid;gap:10px}
+.stop-body .hud{font-size:12px;color:var(--lime)}
+.stop-body h3{margin:0;font-size:21px;line-height:1.4;letter-spacing:-.03em;font-weight:800}
+.stop-body p{margin:0;color:var(--mute);font-size:15px}
+.stop.yours{box-shadow:0 0 0 1px var(--lime) inset}
+.stop .badge{position:absolute;left:14px;top:14px;background:var(--lime);color:var(--navy);font-size:13px;font-weight:800;padding:5px 12px}
+.kit{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(24px,5vw,64px);align-items:center;margin-top:72px}
+.kit-copy p{color:var(--mute);margin:14px 0 0}
+.kit-visual{position:relative;margin:0;min-height:clamp(240px,26vw,320px);background:radial-gradient(70% 70% at 50% 45%,#2c3170,#16172e);clip-path:var(--cut);display:flex;align-items:center;justify-content:center;gap:4%;padding:36px 24px 56px}
+.kit-visual{--neon:#d8f24c;--neon2:#5ff3ff}
+.kit-visual .neo{fill:none;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.kit-visual .nk{width:min(30%,150px);color:var(--neon);filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 18px color-mix(in srgb,currentColor 55%,transparent));animation:neo 3.2s ease-in-out infinite}
+.kit-visual .nk.hex{transform:rotate(-6deg)}
+.kit-visual .nk.btl{width:min(17%,86px);color:var(--neon2);transform:rotate(5deg) translateY(10px);animation-delay:-1.6s}
+.kit-visual .nk.card{width:min(20%,100px);color:var(--neon);transform:rotate(-10deg) translateY(-8px);animation-delay:-.8s;opacity:.85}
+@keyframes neo{0%,100%{opacity:1}50%{opacity:.72}}
+@media (prefers-reduced-motion:reduce){.kit-visual .nk{animation:none}}
+.kit-visual figcaption{position:absolute;left:18px;bottom:16px;font-size:12px;color:var(--mute)}
+@media (max-width:560px){.bt-hero figcaption{position:static;padding:12px}.bt-hero img{aspect-ratio:4/3}.venue-scroll::after{content:'← 옆으로 밀어서 보기 →';display:block;text-align:center;font-size:12px;color:var(--mute);padding-top:8px;position:sticky;left:0}}
+@media (max-width:960px){.route{grid-template-columns:minmax(0,1fr)}.kit{grid-template-columns:minmax(0,1fr)}.stop-img img{aspect-ratio:16/10}}
+
+
+.map svg .route-line{fill:none;stroke:#3f6fd6;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0}
+.map svg .route-line.on{opacity:1;animation:draw 2.3s cubic-bezier(.45,0,.25,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map svg .walker{opacity:0}.map svg.walking .walker{opacity:1}
+.map svg .pulse{transform-box:fill-box;transform-origin:center;animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+.route-tabs{display:grid;gap:8px}
+.rt{display:flex;gap:12px;align-items:center;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);padding:10px 14px;cursor:pointer;transition:border-color .3s,background .3s}
+.rt b{display:block;font-size:15px}.rt small{display:block;font-size:13px;color:var(--mute)}
+.rt.on{border-color:var(--lime);background:#d8f24c12}
+
+.venue{margin-top:72px}
+.venue-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 48px;align-items:end}
+.venue-head h3{margin:12px 0 0;font-size:clamp(22px,2.8vw,30px);font-weight:800;letter-spacing:-.03em;line-height:1.35}
+.venue-head h3 em{font-style:normal;color:var(--lime)}
+.venue-head p{margin:0;color:var(--mute)}
+.venue-scroll{margin-top:28px;overflow-x:auto;background:var(--panel);clip-path:var(--cut);padding:12px}
+.venue-map{display:block;width:100%;min-width:620px;height:auto}
+.venue-map .zl{font-size:24px;font-weight:800;fill:#6e72a8;font-family:PretendardSub,sans-serif}
+.venue-map .fl{font-size:15px;font-weight:600;fill:#9a9dbb;font-family:PretendardSub,sans-serif}
+.venue-map .fl.strong{fill:#fff}.venue-map .fl.sky{fill:#8ec5ff}
+.venue-map .pulse{transform-box:fill-box;transform-origin:center;animation:pulse 2s ease-out infinite}
+.venue-legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-size:14px;color:var(--mute)}
+.venue-legend i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+.venue-legend .note{margin-left:auto;font-size:13px}
+@media (max-width:760px){.venue-head{grid-template-columns:minmax(0,1fr)}.venue-legend .note{margin-left:0}}
+/* motion */
+.js .reveal.pre img{transform:scale(1.06)}
+.reveal img{transition:transform 1.4s cubic-bezier(.2,.6,.2,1)}
+.js .eyebrow::before{transition:transform .9s cubic-bezier(.2,.6,.2,1)}
+.js .reveal.pre .eyebrow::before{transform:rotate(-180deg) scale(.4)}
+h2 em{background:linear-gradient(var(--lime),var(--lime)) 0 100%/0 3px no-repeat;transition:background-size 1s cubic-bezier(.2,.6,.2,1) .3s;padding-bottom:2px}
+.reveal:not(.pre) h2 em,.hero h1 em{background-size:100% 3px}
+.hero h1 em{background:none}
+.stop,.member,.sp,.shot{transition:transform .4s cubic-bezier(.2,.6,.2,1)}
+@media (hover:hover){.stop:hover,.sp:hover{transform:translateY(-6px)}.member:hover .ph{transform:rotate(0) translateY(-6px)}}
+.member .ph{transition:transform .4s cubic-bezier(.2,.6,.2,1)}
+.js .hero .wrap>*{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.6,.2,1)}
+.js body.entered .hero .wrap>*,.js .entered .hero .wrap>*{opacity:1;transform:none}
+.hero .wrap>*:nth-child(2){transition-delay:.12s}.hero .wrap>*:nth-child(3){transition-delay:.24s}.hero .wrap>*:nth-child(4){transition-delay:.36s}
+.hero>img{animation:heroIn 2.4s cubic-bezier(.2,.6,.2,1) both}
+@keyframes heroIn{from{transform:scale(1.08)}to{transform:none}}
+
+
+#pv{position:fixed;inset:0;z-index:60;background:#000;display:grid;place-items:center;opacity:0;transition:opacity .7s ease}
+#pv[hidden]{display:none}
+#pv.show{opacity:1}
+#pv video{width:100%;height:100%;object-fit:contain;background:#000}
+.pv-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:calc(14px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(#000a,transparent)}
+.pv-top .hud{font-size:12px;color:var(--lime)}
+.pv-ctrl{display:flex;gap:8px}
+.pv-btn{font:inherit;font-size:13px;font-weight:600;color:#fff;background:#ffffff14;border:1px solid #ffffff40;padding:8px 14px;cursor:pointer;backdrop-filter:blur(6px)}
+.pv-btn.skip{font-family:var(--f-hud);letter-spacing:.2em;color:var(--navy);background:var(--lime);border-color:var(--lime)}
+.pv-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:#ffffff1a}
+.pv-bar i{display:block;height:100%;width:0;background:var(--lime)}
+.film-sec{padding-top:40px}
+.film{margin-top:40px;background:#000;clip-path:var(--cut)}
+.film video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+
+
+.flow{list-style:none;margin:56px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;position:relative}
+.flow::before{content:"";position:absolute;left:10%;right:10%;top:62px;height:2px;background:repeating-linear-gradient(90deg,var(--lime) 0 8px,transparent 8px 16px);opacity:.5}
+.flow li{position:relative;background:var(--panel);clip-path:var(--cut);padding:26px 20px 28px;display:grid;gap:8px;justify-items:start}
+.fx-no{font-family:var(--f-hud);font-weight:800;font-size:15px;color:var(--mute)}
+.fx-ic{width:64px;height:64px;padding:12px;background:var(--navy);border:1.5px solid var(--lime);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);fill:none;stroke:var(--lime);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;margin:4px 0 8px;transition:transform .6s cubic-bezier(.2,.6,.2,1)}
+.flow li:hover .fx-ic{transform:rotate(30deg) scale(1.06)}
+.flow .hud{font-size:12px;color:var(--lime)}
+.flow b{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.flow p{margin:0;font-size:14px;color:var(--mute);line-height:1.6}
+@media (max-width:960px){.flow{grid-template-columns:minmax(0,1fr)}.flow::before{display:none}.flow li{grid-template-columns:auto 1fr;column-gap:18px;align-items:center}.flow li .fx-ic{grid-row:span 3;margin:0}.flow .fx-no{display:none}.flow p{grid-column:2}}
+
+.viewer{position:relative;margin-top:48px;background:#0b0c10;clip-path:var(--cut);aspect-ratio:8/5;overflow:hidden}
+.vprev{position:absolute;inset:0}
+.vprev video{width:100%;height:100%;object-fit:cover;display:block;background:#0b0c10}
+.vtag{position:absolute;left:18px;top:16px;font-size:11px;color:var(--lime);padding:5px 10px;background:#10111ccc;border:1px solid var(--line)}
+.viewer iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0b0c10}
+.viewer-cta{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:clamp(18px,3vw,28px);background:linear-gradient(transparent,#0b0c10ee 55%)}
+.vc-txt{display:grid;gap:4px}
+.viewer-cta .hud{font-size:12px;color:var(--lime)}
+.viewer-cta b{font-size:clamp(20px,2.6vw,28px);font-weight:800;letter-spacing:-.03em}
+.viewer-cta small{color:#c9cce2;font-size:14px;line-height:1.6}
+.viewer.live .vprev,.viewer.live .viewer-cta{display:none}
+.stop-tag{padding:20px 22px 0}
+.stop .badge{position:static;display:inline-block}
+@media (max-width:560px){.viewer{aspect-ratio:auto;display:flex;flex-direction:column}.vprev{position:relative;aspect-ratio:8/5}.viewer-cta{position:static;background:var(--panel);flex-direction:column;align-items:stretch}.viewer-cta .btns{flex-direction:column}.viewer-cta .btns .btn{justify-content:center;padding-block:13px}.viewer.live{aspect-ratio:3/4}}
+
+.reveal{transition:opacity .9s ease,transform .9s cubic-bezier(.2,.6,.2,1)}
+.js .reveal.pre{opacity:.001;transform:translateY(28px)}
+
+@media (max-width:960px){
+  .rail{display:none}
+  .team{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .booth-grid,.dp,.info{grid-template-columns:minmax(0,1fr)}
+  .list{grid-template-columns:minmax(0,1fr)}
+  .loop{grid-template-columns:repeat(5,minmax(120px,1fr));overflow-x:auto}
+}
+@media (max-width:560px){
+  body{font-size:15px}
+  section{padding-block:64px}
+  .date-card::after{display:none}
+  .dates .d{font-size:44px}
+  .s-half{grid-column:span 12}
+  .hero{min-height:88vh}
+  .hero>img{object-position:58% 18%}
+  .spec b{font-size:21px}
+  .team{gap:12px}
+  .member .body{padding:14px 14px 18px}
+  .member h3{font-size:19px}
+  .member li{font-size:13px}
+  .sponsors{grid-template-columns:minmax(0,1fr)}
+  .item.has-logo{grid-template-columns:88px minmax(0,1fr)}
+  .logo-chip{width:88px;height:54px}
+  .row{grid-template-columns:78px minmax(0,1fr)}
+  .loop{grid-template-columns:repeat(5,minmax(140px,1fr))}
+  .loop small{white-space:nowrap}
+  .hero-top .wrap span:last-child{display:none}
+  .logo-chip.word{font-size:12px}
+  .dates .dash{width:22px;margin-bottom:40px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+
+<!-- ================= INTRO ================= -->
+<div id="intro" role="dialog" aria-label="초대장 봉투">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <button class="intro-skip" id="skip" type="button">SKIP</button>
+  <img class="intro-logo" src="../img/eternia_logo.png" alt="ETERNIA">
+  <div class="stage" id="stage">
+    <div class="lmask"><div class="letter" aria-live="polite">
+      <div class="fold f1"><div class="to">TO.</div><div class="who">스콧해미쉬 귀하</div></div>
+      <div class="rest"><div><div class="fold f2"><img src="../img/eternia_logo.png" alt="ETERNIA"></div>
+      <div class="fold f3"><div class="big">이터니아의 세계로<br><span>당신을 초대합니다</span></div></div>
+      <div class="fold f4"><div class="when">2026.11.11 — 11.15<br>HONGIK ART CENTER B1</div><button class="enter" id="enter" type="button">초대장 펼쳐보기</button></div></div></div>
+    </div></div>
+    <div class="env">
+      <div class="env-back"></div>
+      <div class="flap"></div>
+      <div class="env-front"><div class="env-to">TO.<b>스콧해미쉬</b></div></div>
+      <button class="seal" id="seal" type="button" aria-label="봉투 열기"><span>E</span></button>
+    </div>
+    <div class="tap">TAP TO OPEN</div>
+  </div>
+</div>
+
+<div id="pv" hidden role="dialog" aria-label="이터니아 PV">
+  <video id="pvVideo" playsinline preload="auto"><source src="../img/pv.mp4" type="video/mp4"></video>
+  <div class="pv-top"><span class="hud">ETERNIA · OPENING PV</span><div class="pv-ctrl"><button type="button" id="pvMute" class="pv-btn">소리 끄기</button><button type="button" id="pvSkip" class="pv-btn skip">SKIP ▸</button></div></div>
+  <div class="pv-bar"><i id="pvProg"></i></div>
+</div>
+
+<!-- ================= RAIL ================= -->
+<nav class="rail" aria-label="섹션">
+  <div class="rail-title">MISSION LOG</div>
+  <a href="#letter" data-k="letter"><span class="rl">초대장</span><span class="rn">00</span></a>
+  <a href="#film" data-k="film"><span class="rl">오프닝 PV</span><span class="rn">PV</span></a>
+  <a href="#world" data-k="world"><span class="rl">게임 소개</span><span class="rn">01</span></a>
+  <a href="#booth" data-k="booth"><span class="rl">전시 부스</span><span class="rn">02</span></a>
+  <a href="#visit" data-k="visit"><span class="rl">오시는 길</span><span class="rn">03</span></a>
+  <a href="#credits" data-k="credits"><span class="rl">크레딧</span><span class="rn">04</span></a>
+</nav>
+
+<main>
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <img src="../img/hero_art.webp" alt="이터니아 키비주얼, 바람에 머리칼이 날리는 주인공" fetchpriority="high">
+  <div class="hero-top"><div class="wrap"><span>SPONSOR <b>INVITATION</b></span><span>2026.11.11 — 11.15</span></div></div>
+  <div class="wrap">
+    <img class="hero-logo" src="../img/eternia_logo.png" alt="ETERNIA">
+    <div class="hero-to">To. SCOTT HAMISH</div>
+    <h1>이터니아의 세계로<br><em>당신을 초대합니다</em></h1>
+    <div class="hero-meta"><span><b>DATE</b>11.11 WED — 11.15 SUN</span><span><b>OPENING</b>11.14 SAT 16:30</span><span><b>PLACE</b><em class="kr">홍익대 대학로 아트센터 B1</em></span></div>
+  </div>
+</header>
+
+<!-- ================= LETTER ================= -->
+<section class="letter-sec" id="letter">
+  <div class="wrap">
+    <div class="dossier reveal">
+      <div class="pol"><div class="collab"><img src="../img/scott_logo.png" alt="SCOTT HAMISH"><span>×</span><img src="../img/eternia_logo.png" alt="ETERNIA"></div></div>
+      <img class="frame" src="../img/dossier.webp" alt="" aria-hidden="true">
+      <div class="page">
+        <div class="to">TO.</div>
+        <div class="who">스콧해미쉬 담당자님께</div>
+        <div class="body wide-only"><p>안녕하세요, 「이터니아(ETERNIA)」 팀입니다.</p>
+<p>이번 졸업전시를 준비하며 스콧해미쉬의 제품을 협찬받았습니다.</p>
+<p>덕분에 게임 속 화장품 제작이 실제 제품 체험으로 이어지는 부스를 완성할 수 있었습니다. 진심으로 감사드립니다.</p>
+<p>11월 11일부터 15일까지 홍익대 대학로 아트센터에서 그 결과물을 처음 공개합니다. 편하실 때 들르셔서 직접 플레이해 보시면 좋겠습니다.</p></div>
+      </div>
+      <div class="pocket wide-only"><span class="hud">FROM.</span><b>TEAM ETERNIA</b></div>
+    </div>
+    <article class="paper narrow-only"><p>안녕하세요, 「이터니아(ETERNIA)」 팀입니다.</p>
+<p>이번 졸업전시를 준비하며 스콧해미쉬의 제품을 협찬받았습니다.</p>
+<p>덕분에 게임 속 화장품 제작이 실제 제품 체험으로 이어지는 부스를 완성할 수 있었습니다. 진심으로 감사드립니다.</p>
+<p>11월 11일부터 15일까지 홍익대 대학로 아트센터에서 그 결과물을 처음 공개합니다. 편하실 때 들르셔서 직접 플레이해 보시면 좋겠습니다.</p><div class="sign"><div><small>FROM.</small><strong>TEAM ETERNIA</strong></div></div></article>
+  </div>
+</section>
+
+<!-- ================= WORLD ================= -->
+<section id="film" class="film-sec">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Official PV</div>
+      <h2>이터니아 <em>오프닝 PV</em></h2>
+    </div>
+    <div class="film reveal">
+      <video id="filmVideo" controls playsinline preload="none" poster="../img/pv_poster.jpg"><source src="../img/pv.mp4" type="video/mp4"></video>
+    </div>
+  </div>
+</section>
+
+<section id="world">
+  <div class="wrap">
+    <div class="world-head reveal">
+      <div class="eyebrow">Cosmetics × Action RPG</div>
+      <h2>제품을 공부하는 대신,<br><em>플레이하게 한다.</em></h2>
+      <p class="lede">이터니아는 화장품의 성분과 효능을 게임의 재료와 제작 시스템으로 풀어낸 액션 RPG예요. 몬스터의 서식지에서 원료를 얻고, 제작소에서 제품을 만들고, 주민의 고민을 해결하며 자연스럽게 브랜드를 만나요.</p>
+    </div>
+    <ol class="flow">
+      <li class="reveal"><span class="fx-no">01</span><svg class="fx-ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 14h44v28H30l-12 10v-10h-8z"/><path d="M32 20v12M32 37v1"/></svg><span class="hud">QUEST</span><b>고민 발견</b><p>주민이 피부 고민을 안고 찾아와요.</p></li>
+      <li class="reveal"><span class="fx-no">02</span><svg class="fx-ic" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22"/><path d="M41 23l-6 12-12 6 6-12z"/><circle cx="32" cy="32" r="2"/></svg><span class="hud">EXPLORE</span><b>원료 탐색</b><p>몬스터의 서식지를 탐험하며 원료를 모아요.</p></li>
+      <li class="reveal"><span class="fx-no">03</span><svg class="fx-ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M26 10h12M28 10v14L14 48a4 4 0 003.5 6h29A4 4 0 0050 48L36 24V10"/><path d="M20 40h24"/><circle cx="29" cy="46" r="1.5"/><circle cx="37" cy="44" r="1.5"/></svg><span class="hud">CRAFT</span><b>화장품 제작</b><p>제작소에서 원료를 조합해 화장품을 만들어요.</p></li>
+      <li class="reveal"><span class="fx-no">04</span><svg class="fx-ic" viewBox="0 0 64 64" aria-hidden="true"><circle cx="28" cy="28" r="16"/><path d="M40 40l14 14"/><path d="M22 28h12M28 22v12"/></svg><span class="hud">UNDERSTAND</span><b>제품 이해</b><p>성분과 효능을 플레이하면서 자연스럽게 익혀요.</p></li>
+      <li class="reveal"><span class="fx-no">05</span><svg class="fx-ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 8l6 16 16 2-12 11 4 17-14-9-14 9 4-17-12-11 16-2z"/></svg><span class="hud">DISCOVER</span><b>브랜드 발견</b><p>게임 속 제품이 실제 브랜드 제품으로 이어져요.</p></li>
+    </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BOOTH ================= -->
+<section class="booth" id="booth">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Offline Exhibition</div>
+      <h2>오프라인에서<br><em>만나는 이터니아</em></h2>
+      <p class="lede">하나의 육각 공간에서 시작되는 입사 체험이에요. 세계관을 만나고, 우주선을 조종하고, 게임 속 원료가 화장품으로 이어지는 순간을 차례로 지나가요.</p>
+    </div>
+    <div class="viewer reveal" id="viewer">
+      <div class="vprev"><video id="boothPrev" poster="../img/booth_preview.jpg" muted loop playsinline autoplay preload="auto" aria-label="육각 부스 3D 미리보기"><source src="../img/booth_preview.webm" type="video/webm"><source src="../img/booth_preview.mp4" type="video/mp4"></video><span class="vtag hud">PREVIEW · 3D</span></div>
+      <div class="viewer-cta">
+        <div class="vc-txt"><span class="hud">VIRTUAL EXHIBITION · 3D</span><b>부스를 직접 둘러보세요</b><small>드래그로 회전 · 스크롤로 확대<br>기업 → 암실 → 협찬사 순서로 관람</small></div>
+        <div class="btns"><button type="button" class="btn lime" id="viewerStart">3D 가상 전시 들어가기 ▸</button><a class="btn" href="../../index.html" target="_blank" rel="noopener">새 창에서 보기 ↗</a></div>
+      </div>
+    </div>
+    <div class="route">
+      <article class="stop reveal"><div class="stop-body"><div class="hud">01 / HEXABLOOM BIOTECH</div><h3>이터니아로 향하는<br>첫 번째 지원서</h3><p>가상의 기업 헥사블룸 바이오테크를 통해 세계관에 들어가요. 호넷 표본과 콜라보 패키지, 인게임 오브제를 둘러보고 입사 지원서를 받아요.</p></div></article>
+      <article class="stop reveal"><div class="stop-body"><div class="hud">02 / BOARDING THE HORNET</div><h3>이제, 당신이<br>플레이어입니다</h3><p>흰 벽과 사다리꼴 책상이 우주선 조종석이 돼요. 두 모니터로 PV와 게임을 만나고, 주인공의 아우터도 직접 입어볼 수 있어요.</p></div></article>
+      <article class="stop yours reveal"><div class="stop-tag"><span class="badge">스콧해미쉬 제품 전시</span></div>
+        <div class="stop-body"><div class="hud">03 / INGREDIENTS BECOME BEAUTY</div><h3>게임 속 화장품 제작이<br>현실의 구매 경험으로</h3><p>블랙 보드의 원료 스케치와 실제 화장품을 함께 보여줘요. 스콧해미쉬와 브리올옴므의 제품, 샘플 테스터, 판타지 원료와 미니 아크릴 스탠드를 함께 배치해요.</p></div></article>
+    </div>
+    <div class="kit reveal">
+      <div class="kit-copy"><div class="eyebrow">Complete · Application Kit</div><h3>탐험의 기록을<br>가지고 돌아갑니다</h3><p>관람 중 채운 입사 지원서를 제출하면 협찬 제품을 받아요. 강나린 사원증·랜야드, 3D 프린팅 헥사블룸 뱃지와 증정 제품으로 이어지는 입사 지원 키트로 전시 경험을 마무리해요.</p></div>
+      <figure class="kit-visual">
+<svg class="nk card" viewBox="0 0 100 140" aria-label="사원증"><g class="neo" stroke="currentColor"><path d="M50 4v14"/><rect x="38" y="16" width="24" height="9" rx="3"/><rect x="8" y="25" width="84" height="110" rx="8"/><circle cx="50" cy="62" r="15"/><path d="M28 104h44M34 118h32"/></g></svg>
+<svg class="nk hex" viewBox="0 0 120 120" aria-label="3D 프린팅 헥사블룸 뱃지"><g class="neo" stroke="currentColor"><path d="M60 6l47 27v54l-47 27-47-27V33z"/><path d="M60 24l31 18v36l-31 18-31-18V42z" opacity=".55"/><path d="M60 46l12 7v14l-12 7-12-7V53z"/></g></svg>
+<svg class="nk btl" viewBox="0 0 60 150" aria-label="스콧해미쉬 증정 제품"><g class="neo" stroke="currentColor"><rect x="20" y="4" width="20" height="22" rx="3"/><path d="M22 26v8c-10 4-14 10-14 20v82a10 10 0 0 0 10 10h24a10 10 0 0 0 10-10V54c0-10-4-16-14-20v-8"/><path d="M16 74h28v40H16z" opacity=".55"/></g></svg>
+<figcaption class="hud">APPLICATION KIT · 사원증 + 3D 뱃지 + SCOTT HAMISH</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VISIT ================= -->
+<section id="visit">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Exhibition Info</div>
+      <h2>2026 건국대학교 디자인대학<br>미디어콘텐츠학과 졸업전시</h2>
+    </div>
+    <div class="info">
+      <div class="date-card reveal">
+        <div class="hud" style="color:var(--lime);font-size:14px">SAVE THE DATE</div>
+        <div class="dates"><div class="d">11.11<small>WED</small></div><div class="dash"></div><div class="d">11.15<small>SUN</small></div></div>
+        <div class="rows">
+          <div class="row"><span class="hud">OPEN</span><span>10:00 – 17:30</span></div>
+          <div class="row"><span class="hud">OPENING</span><span>11.14 (토) 오후 4:30<small>오프닝 세리머니</small></span></div>
+          <div class="row"><span class="hud">PLACE</span><span>홍익대학교 대학로 <span class="nw">아트센터 B1</span><small>이터니아 부스</small></span></div>
+        </div>
+      </div>
+      <div class="map reveal">
+        <svg viewBox="0 0 640 400" role="img" aria-label="혜화역 3번 출구와 종로5가역 2번 출구 사이, 대학로에 있는 홍익대 대학로 아트센터 약도">
+          <defs><pattern id="gr" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#e8edf8" stroke-width="1.5"/></pattern></defs>
+          <rect width="640" height="400" fill="#eef3fd"/>
+          <rect x="16" y="16" width="608" height="368" rx="6" fill="#fff" stroke="#cdd7f0" stroke-width="2"/>
+          <rect x="17" y="17" width="606" height="366" rx="5" fill="url(#gr)"/>
+          <rect x="356" y="17" width="20" height="366" fill="#e0e6f6"/>
+          <rect x="17" y="300" width="606" height="18" fill="#e0e6f6"/>
+          <rect x="402" y="120" width="150" height="82" rx="12" fill="#e3f3cd"/>
+          <text x="477" y="167" text-anchor="middle" font-size="17" font-weight="800" fill="#5b7d2c" font-family="PretendardSub, sans-serif">마로니에공원</text>
+          <path d="M366 84V246H278" fill="none" stroke="#9db8ec" stroke-width="3" stroke-dasharray="8 7"/>
+          <path d="M272 309H366V246H278" fill="none" stroke="#9db8ec" stroke-width="3" stroke-dasharray="8 7"/>
+          <path id="r4" class="route-line" d="M366 84V246H278" pathLength="1"/>
+          <path id="r1" class="route-line" d="M272 309H366V246H278" pathLength="1"/>
+          <circle class="walker" r="7" fill="#d8f24c" stroke="#1d2257" stroke-width="3"><animateMotion id="mv4" dur="2.2s" begin="indefinite" fill="freeze"><mpath href="#r4"/></animateMotion><animateMotion id="mv1" dur="2.4s" begin="indefinite" fill="freeze"><mpath href="#r1"/></animateMotion></circle>
+          <circle cx="366" cy="62" r="20" fill="#5b8fe0" stroke="#fff" stroke-width="4"/>
+          <text x="366" y="69" text-anchor="middle" font-size="19" font-weight="800" fill="#fff" font-family="Saira Condensed, sans-serif">4</text>
+          <text x="334" y="68" text-anchor="end" font-size="18" font-weight="800" fill="#232549" font-family="PretendardSub, sans-serif">혜화역 3번 출구</text>
+          <text x="396" y="70" font-size="18" font-weight="600" fill="#6b7099" font-family="PretendardSub, sans-serif">대학로</text>
+          <rect x="40" y="222" width="200" height="62" rx="3" fill="#1d2257"/>
+          <text x="56" y="250" font-size="17" font-weight="800" fill="#fff" font-family="PretendardSub, sans-serif">홍익대 대학로 아트센터</text>
+          <text x="56" y="272" font-size="10" font-weight="600" letter-spacing="1.6" fill="#d8f24c" font-family="Saira, sans-serif">HONGIK ART CENTER</text>
+          <polygon class="pulse" points="246,212 276,229 276,263 246,280 216,263 216,229" fill="none" stroke="#d8f24c" stroke-width="4"/>
+          <polygon points="246,212 276,229 276,263 246,280 216,263 216,229" fill="#d8f24c" stroke="#1d2257" stroke-width="4"/>
+          <text x="246" y="253" text-anchor="middle" font-size="17" font-weight="800" fill="#1d2257" font-family="Saira Condensed, sans-serif">B1F</text>
+          <circle cx="250" cy="309" r="20" fill="#2f3a96" stroke="#fff" stroke-width="4"/>
+          <text x="250" y="316" text-anchor="middle" font-size="19" font-weight="800" fill="#fff" font-family="Saira Condensed, sans-serif">1</text>
+          <text x="250" y="356" text-anchor="middle" font-size="18" font-weight="800" fill="#232549" font-family="PretendardSub, sans-serif">종로5가역 2번 출구</text>
+          <text x="600" y="290" text-anchor="end" font-size="18" font-weight="600" fill="#6b7099" font-family="PretendardSub, sans-serif">종로</text>
+          <text x="608" y="372" text-anchor="end" font-size="12" fill="#9aa1c2" font-family="PretendardSub, sans-serif">* 개략도이며 실제 축척과 다릅니다</text>
+        </svg>
+        <div class="map-body">
+          <div class="addr"><div><b>서울 종로구 대학로 57</b><div style="color:var(--mute);font-size:14px">홍익대학교 대학로 아트센터 지하 1층</div></div>
+            <button class="btn" id="copy" type="button">주소 복사</button></div>
+          <div class="route-tabs" role="tablist" aria-label="출발 출구 선택">
+            <button type="button" class="rt on" data-r="4" role="tab" aria-selected="true"><span class="line-badge" style="background:#5b8fe0">4</span><span><b>혜화역 3번 출구</b><small>대학로를 따라 남쪽으로 · 도보 약 7분</small></span></button>
+            <button type="button" class="rt" data-r="1" role="tab" aria-selected="false"><span class="line-badge" style="background:#2f3a96">1</span><span><b>종로5가역 2번 출구</b><small>종로에서 대학로로 올라오기 · 도보 약 7분</small></span></button>
+          </div>
+          <div class="btns">
+            <a class="btn lime" href="https://map.naver.com/p/search/%ED%99%8D%EC%9D%B5%EB%8C%80%ED%95%99%EA%B5%90%20%EB%8C%80%ED%95%99%EB%A1%9C%20%EC%95%84%ED%8A%B8%EC%84%BC%ED%84%B0" target="_blank" rel="noopener">네이버 지도</a>
+            <a class="btn" href="https://map.kakao.com/?q=%ED%99%8D%EC%9D%B5%EB%8C%80%ED%95%99%EA%B5%90%20%EB%8C%80%ED%95%99%EB%A1%9C%20%EC%95%84%ED%8A%B8%EC%84%BC%ED%84%B0" target="_blank" rel="noopener">카카오맵</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="venue reveal">
+      <div class="venue-head">
+        <div><div class="eyebrow">Floor Map</div><h3>이터니아는 <em>4구역 첫 번째 부스</em>에 있어요</h3></div>
+        <p>B1 전시장에 들어오시면 안쪽 벽을 따라 놓인 4구역에서 가장 왼쪽, 초록 형광 육각 표시가 이터니아 부스예요.</p>
+      </div>
+      <div class="venue-scroll"><svg class="venue-map" viewBox="0 0 1020 640" role="img" aria-label="졸업전시 배치도. 전시장은 1구역부터 5구역으로 나뉘고, 이터니아는 위쪽 벽 4구역의 가장 왼쪽 부스입니다.">
+        <defs><pattern id="vg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#23254d" stroke-width="1"/></pattern></defs>
+        <g transform="translate(0 70)">
+          <polygon points="25,30 995,30 995,345 610,345 610,555 25,555" fill="#181a33"/>
+          <polygon points="25,30 995,30 995,345 610,345 610,555 25,555" fill="url(#vg)"/>
+          <polygon points="25,30 995,30 995,345 610,345 610,555 25,555" fill="none" stroke="#6f74b8" stroke-width="5" stroke-linejoin="round"/>
+          <!-- zones -->
+          <g class="zone"><rect x="103" y="48" width="665" height="68" rx="6" fill="#2a2d55"/><text x="760" y="140" text-anchor="end" class="zl">4구역</text></g>
+          <g class="zone"><rect x="425" y="150" width="225" height="115" rx="8" fill="#232650"/><text x="537" y="214" text-anchor="middle" class="zl">5구역</text></g>
+          <g class="zone"><rect x="227" y="290" width="549" height="52" rx="6" fill="#232650"/><text x="700" y="278" class="zl">1구역</text></g>
+          <g class="zone"><rect x="30" y="263" width="152" height="270" rx="6" fill="#232650"/><text x="106" y="403" text-anchor="middle" class="zl">3구역</text></g>
+          <g class="zone"><rect x="186" y="350" width="420" height="183" rx="6" fill="#232650"/><text x="396" y="448" text-anchor="middle" class="zl">2구역</text></g>
+          <!-- other booths in zone 4 -->
+          <g fill="#3a3e70"><rect x="250" y="58" width="48" height="48" rx="4"/><rect x="318" y="58" width="48" height="48" rx="4"/><rect x="440" y="58" width="48" height="48" rx="4"/><rect x="510" y="58" width="48" height="48" rx="4"/><rect x="640" y="58" width="48" height="48" rx="4"/><rect x="708" y="58" width="48" height="48" rx="4"/></g>
+          <!-- facilities -->
+          <rect x="30" y="150" width="20" height="100" rx="3" fill="#4a4f8a"/><text x="62" y="205" class="fl">오프닝 스크린</text>
+          <rect x="860" y="300" width="70" height="36" rx="4" fill="#4a4f8a"/><text x="895" y="323" text-anchor="middle" class="fl strong">데스크</text>
+          <rect x="955" y="110" width="30" height="88" rx="3" fill="#4a4f8a"/><text x="940" y="160" text-anchor="end" class="fl">졸업명단</text>
+          <rect x="790" y="96" width="70" height="34" rx="4" fill="none" stroke="#4a4f8a" stroke-width="2" stroke-dasharray="5 4"/><text x="825" y="118" text-anchor="middle" class="fl">이벤트 존</text>
+          <!-- doors -->
+          <g class="door"><rect x="15" y="90" width="20" height="44" rx="3" fill="#8ec5ff"/><text x="44" y="118" class="fl sky">출입문</text></g>
+          <g class="door"><rect x="985" y="214" width="20" height="44" rx="3" fill="#8ec5ff"/><text x="975" y="276" text-anchor="end" class="fl sky">출입문</text></g>
+          <!-- ETERNIA -->
+          <polygon class="pulse" points="137,52 166,69 166,103 137,120 108,103 108,69" fill="none" stroke="#d8f24c" stroke-width="4"/>
+          <rect x="113" y="58" width="49" height="48" rx="4" fill="#d8f24c"/>
+          <text x="137" y="88" text-anchor="middle" font-size="15" font-weight="800" fill="#1d2257" font-family="Saira Condensed, sans-serif">E</text>
+          <path d="M137 50V-6" stroke="#d8f24c" stroke-width="2"/>
+          <rect x="70" y="-56" width="300" height="50" rx="4" fill="#d8f24c"/>
+          <text x="86" y="-24" font-size="22" font-weight="800" fill="#1d2257" font-family="Saira Condensed, sans-serif" letter-spacing="2">ETERNIA</text>
+          <text x="206" y="-25" font-size="16" font-weight="800" fill="#1d2257" font-family="PretendardSub, sans-serif">4구역 · 첫 번째 부스</text>
+        </g>
+      </svg></div>
+      <div class="venue-legend"><span><i style="background:#d8f24c"></i>이터니아 부스</span><span><i style="background:#3a3e70"></i>다른 전시 작품</span><span><i style="background:#8ec5ff"></i>출입문</span><span><i style="background:#4a4f8a"></i>안내 시설</span><span class="note">* 개략도이며 실제 축척과 다릅니다</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CREDITS ================= -->
+<section id="credits">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Credits</div>
+      <h2>이터니아를<br><em>함께 만든 사람들</em></h2>
+    </div>
+    <div class="team">
+      <article class="member reveal"><div class="ph"><img src="../img/p_hajin.webp" alt="김하진" loading="lazy"><span class="no">AGENT 01</span></div><div class="body"><h3>김하진 <small>PM · UI/UX</small></h3><ul><li>프로젝트 및 전시 기획 총괄 (PM)</li><li>비즈니스 개발 (BD) 총괄</li><li>UI/UX 디자인 · 프로젝트 디자인</li><li>게임 콘텐츠 기획 · 시스템 폴리싱</li></ul></div></article>
+      <article class="member reveal"><div class="ph"><img src="../img/p_yejin.webp" alt="김예진" loading="lazy"><span class="no">AGENT 02</span></div><div class="body"><h3>김예진 <small>ART · SOUND</small></h3><ul><li>배경 아트 총괄</li><li>사운드 총괄</li><li>브랜드 파트너십 기획</li><li>창업 기획 및 사업화</li></ul></div></article>
+      <article class="member reveal"><div class="ph"><img src="../img/p_minseo.webp" alt="최민서" loading="lazy"><span class="no">AGENT 03</span></div><div class="body"><h3>최민서 <small>ART DIRECTOR</small></h3><ul><li>아트 디렉션 총괄</li><li>캐릭터 일러스트 · 애니메이팅</li><li>전투 씬 구현 · 게임 폴리싱</li><li>창업 기획 및 사업화</li></ul></div></article>
+      <article class="member reveal"><div class="ph"><img src="../img/p_changhoon.webp" alt="강창훈" loading="lazy"><span class="no">AGENT 04</span></div><div class="body"><h3>강창훈 <small>SYSTEM</small></h3><ul><li>게임 시스템 기반 구현</li><li>전투 씬 콘텐츠 기획</li><li>게임 스토리 DB 구조 설계</li></ul></div></article>
+    </div>
+    <p style="margin:16px 0 0;color:var(--mute);font-size:14px">건국대학교 글로컬 미디어콘텐츠학과</p>
+
+    <div class="group reveal">
+      <div class="group-title"><span class="hud">Sponsored by</span><span>협찬</span></div>
+      <div class="sponsors">
+        <div class="sp you"><img class="mark-img" src="../img/scott_logo.png" alt="Scott Hamish Philosophy"><div class="kr">스콧해미쉬</div><div class="what">전시 운영 및 체험용 제품 협찬</div></div>
+        <div class="sp"><img class="mark-img" src="../img/brioll_logo.png" alt="brial HOMME"><div class="kr">브리올옴므</div><div class="what">전시 운영 및 체험용 제품 협찬</div></div>
+      </div>
+    </div>
+
+    <div class="group reveal">
+      <div class="group-title"><span class="hud">Partners</span><span>협력</span></div>
+      <div class="list">
+        <div class="item has-logo"><div class="logo-chip"><img src="../img/w_cns.png" alt="CNS 로고"></div><div class="nm">한성대학교 패션동아리 CNS</div><div class="org">임현주 · 안영웅 · 정원준</div><div class="role">강나린 활동복 제작</div></div>
+        <div class="item has-logo"><div class="logo-chip"><img src="../img/w_3dht.png" alt="3D High Tech 로고"></div><div class="nm">3D HIGHTECH</div><div class="org">김기윤</div><div class="role">로고 간판 제작 협력</div></div>
+        <div class="item has-logo"><div class="logo-chip word">ORNEM</div><div class="nm">ORNEM DESIGN STUDIO</div><div class="org">유동현</div><div class="role">전시 오브제 3D 프린팅</div></div>
+      </div>
+    </div>
+
+    <div class="group reveal">
+      <div class="group-title"><span class="hud">Mentors</span><span>멘토</span></div>
+      <div class="list">
+        <div class="item"><div class="nm">최원석 교수</div><div class="org">건국대 글로컬 미디어콘텐츠학과 전임교수</div><div class="role">졸업작품 및 창업동아리 지도</div></div>
+        <div class="item"><div class="nm">최일 교수</div><div class="role">전시 부스 제작 지도</div></div>
+        <div class="item has-logo"><div class="logo-chip word">KONKUK<br>UNIV.</div><div class="nm">건국대학교 창업교육센터</div><div class="org">Startup Education Center</div><div class="role">창업지원 프로그램 연계 · 지원금 활용 지원</div></div>
+        <div class="item has-logo"><div class="logo-chip"><img src="../img/w_toons.png" alt="TOONS 로고"></div><div class="nm">심규민</div><div class="org">튠즈</div><div class="role">창업 기획 및 브랜딩 멘토링</div></div>
+        <div class="item has-logo"><div class="logo-chip word">NALLIJAKU</div><div class="nm">이민상</div><div class="org">날리자쿠</div><div class="role">사업계획서 검토 및 멘토링</div></div>
+      </div>
+    </div>
+
+    <div class="group reveal">
+      <div class="group-title"><span class="hud">Production Support</span><span>제작지원</span></div>
+      <div class="list">
+        <div class="item"><div class="nm">안서연</div><div class="org">서울시립대학교 경영학과</div><div class="role">전시 기획 지원 · 사업계획서 피드백 · 대외 커뮤니케이션 지원</div></div>
+        <div class="item"><div class="nm">김연우</div><div class="role">캐릭터 디자인 및 일러스트</div></div>
+        <div class="item"><div class="nm">윤혜진</div><div class="role">캐릭터 일러스트</div></div>
+        <div class="item"><div class="nm">박민규</div><div class="role">전투 보스 및 무기 디자인 · 일러스트</div></div>
+        <div class="item"><div class="nm">송수빈</div><div class="role">초기 캐릭터 디자인 협력</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <img class="bg" src="../img/bg_station.webp" alt="" loading="lazy">
+  <div class="wrap">
+    <img class="logo" src="../img/eternia_logo.png" alt="ETERNIA">
+    <div class="hud" style="color:var(--lime);margin-top:12px;font-size:14px;letter-spacing:.4em">APIS-07</div>
+    <p>이터니아의 첫 장면을 전시장에서 직접 만나보세요.<br>TEAM ETERNIA가 기다리고 있겠습니다.</p>
+    <small>Team ETERNIA · 건국대학교 글로컬 미디어콘텐츠학과 · 2026</small>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add("js");
+(function(){
+  const intro=document.getElementById("intro"), body=document.body;
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  body.classList.add("locked");
+  // stars
+  const cv=document.getElementById("stars"), cx=cv.getContext("2d"); let W,H,D=1,S=[],P=[],raf;
+  function size(){D=Math.min(devicePixelRatio||1,1.5);W=cv.width=innerWidth*D;H=cv.height=innerHeight*D;S=Array.from({length:110},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,t:Math.random()*6}));}
+  size(); addEventListener("resize",size);
+  function burst(){const cxp=W/2,cyp=H*.46,cols=["#d8f24c","#ffffff","#8ec5ff","#fff6c0"];
+    for(let i=0;i<120;i++){const a=Math.random()*Math.PI*2,s=(Math.random()*7+2)*D;P.push({x:cxp,y:cyp,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2,l:70+Math.random()*60,r:(Math.random()*2+.6)*D,c:cols[i%4]});}}
+  function tick(t){cx.clearRect(0,0,W,H);
+    for(const s of S){cx.globalAlpha=.35+.35*Math.sin(t/900+s.t);cx.fillStyle="#fff";cx.beginPath();cx.arc(s.x,s.y,s.r*D,0,7);cx.fill();}
+    P=P.filter(p=>p.l>0);for(const p of P){p.x+=p.vx;p.y+=p.vy;p.vx*=.97;p.vy=p.vy*.97+.05*D;p.l--;cx.globalAlpha=Math.min(1,p.l/50);cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill();}
+    if(!intro.classList.contains("gone")) raf=requestAnimationFrame(tick);}
+  if(!reduce) raf=requestAnimationFrame(tick);
+  let step=0;
+  const letterEl=intro.querySelector(".letter"), stageEl=document.getElementById("stage");
+  const maskEl=intro.querySelector(".lmask");
+  function measure(){const sr=stageEl.getBoundingClientRect(), h=letterEl.offsetHeight, top=sr.height*.06;
+    const y0=sr.top+top;
+    maskEl.style.setProperty("--mh",(sr.top+sr.height*.6)+"px");
+    letterEl.style.setProperty("--lx",(sr.left+sr.width*.06)+"px");
+    letterEl.style.setProperty("--lw",(sr.width*.88)+"px");
+    letterEl.style.setProperty("--ly",y0+"px");
+    letterEl.style.setProperty("--lift",(-(top+Math.min(110,sr.height*.5)*.72))+"px");
+    const target=Math.max(16,(innerHeight-h)/2);
+    letterEl.style.setProperty("--center",(target-y0)+"px");}
+  measure(); addEventListener("resize",()=>{ if(!intro.classList.contains("unfold")) measure(); });
+  function open(){ if(step) return; step=1; measure(); try{document.getElementById("pvVideo").load()}catch(e){}
+    if(reduce){intro.classList.add("open","lift","unfold");return;}
+    intro.classList.add("open");
+    setTimeout(()=>intro.classList.add("lift"),500);
+    setTimeout(()=>{intro.classList.add("unfold");setTimeout(burst,600);},1300);
+  }
+  function close(){intro.classList.add("gone");body.classList.remove("locked");body.classList.add("entered");cancelAnimationFrame(raf);
+    setTimeout(()=>{intro.hidden=true},1000); document.getElementById("letter").scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"}); }
+  document.getElementById("seal").addEventListener("click",open);
+  document.getElementById("stage").addEventListener("click",e=>{ if(!e.target.closest("#enter")) open(); });
+  const pv=document.getElementById("pv"), pvv=document.getElementById("pvVideo"), prog=document.getElementById("pvProg"), muteB=document.getElementById("pvMute");
+  let pvOn=false;
+  function startPV(){ pvOn=true; pv.hidden=false; requestAnimationFrame(()=>pv.classList.add("show"));
+    try{pvv.currentTime=0}catch(e){} pvv.muted=false; muteB.textContent="소리 끄기";
+    const p=pvv.play(); if(p&&p.catch) p.catch(()=>{ pvv.muted=true; muteB.textContent="소리 켜기"; pvv.play().catch(()=>endPV()); }); }
+  function endPV(){ if(!pvOn) return; pvOn=false; pvv.pause(); pv.classList.remove("show"); setTimeout(()=>{pv.hidden=true},700);
+    body.classList.remove("locked"); body.classList.add("entered"); document.getElementById("letter").scrollIntoView({behavior:"auto",block:"start"}); }
+  pvv.addEventListener("ended",endPV);
+  pvv.addEventListener("timeupdate",()=>{ if(pvv.duration) prog.style.width=(pvv.currentTime/pvv.duration*100)+"%"; });
+  document.getElementById("pvSkip").addEventListener("click",endPV);
+  muteB.addEventListener("click",()=>{ pvv.muted=!pvv.muted; muteB.textContent=pvv.muted?"소리 켜기":"소리 끄기"; });
+  function enterSite(){ intro.classList.add("gone"); cancelAnimationFrame(raf); setTimeout(()=>{intro.hidden=true},1000); window.scrollTo(0,0); startPV(); }
+  document.getElementById("enter").addEventListener("click",enterSite);
+  document.getElementById("skip").addEventListener("click",enterSite);
+  addEventListener("keydown",e=>{ if(pvOn&&e.key==="Escape") endPV(); });
+  addEventListener("keydown",e=>{ if(intro.classList.contains("gone")) return; if(e.key==="Enter"||e.key===" "){ if(step&&intro.classList.contains("unfold")) enterSite(); else open(); e.preventDefault(); } if(e.key==="Escape") enterSite(); });
+
+  // reveal on scroll (content is visible without JS / before observer)
+  const els=[...document.querySelectorAll(".reveal")];
+  if("IntersectionObserver" in window && !reduce){
+    const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){en.target.classList.remove("pre");io.unobserve(en.target);} }),{rootMargin:"0px 0px -8% 0px"});
+    els.forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top>innerHeight){el.classList.add("pre");io.observe(el);} });
+  }
+  // stagger siblings
+  document.querySelectorAll(".flow,.route,.team,.sponsors,.list").forEach(g=>[...g.children].forEach((c,i)=>{c.style.transitionDelay=(i%4)*90+"ms"}));
+  // map routes
+  const svg=document.querySelector(".map svg"), walker=svg.querySelector(".walker");
+  function play(r){ svg.querySelectorAll(".route-line").forEach(p=>p.classList.remove("on")); const p=svg.getElementById("r"+r); void p.getBoundingClientRect(); p.classList.add("on");
+    document.querySelectorAll(".rt").forEach(b=>{const on=b.dataset.r===r;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+    if(!reduce){ svg.classList.add("walking"); try{svg.getElementById("mv"+r).beginElement()}catch(e){} } else { p.style.animation="none"; p.style.strokeDashoffset=0; } }
+  document.querySelectorAll(".rt").forEach(b=>b.addEventListener("click",()=>play(b.dataset.r)));
+  if("IntersectionObserver" in window){ const mo=new IntersectionObserver(es=>{ if(es[0].isIntersecting){ play("4"); mo.disconnect(); } },{threshold:.5}); mo.observe(svg); } else play("4");
+  // 3D viewer
+  document.getElementById("viewerStart").addEventListener("click",()=>{ const v=document.getElementById("viewer"); const f=document.createElement("iframe"); f.src="../../index.html"; f.title="이터니아 3D 가상 전시"; f.allow="fullscreen; autoplay"; f.setAttribute("allowfullscreen",""); v.appendChild(f); v.classList.add("live"); const bp=document.getElementById("boothPrev"); if(bp) bp.pause(); });
+  // rail
+  const links=[...document.querySelectorAll(".rail a")];
+  const secs=links.map(a=>document.getElementById(a.dataset.k));
+  links.forEach(a=>a.addEventListener("click",e=>{ e.preventDefault(); const t=document.getElementById(a.dataset.k); if(!t) return; const y=t.getBoundingClientRect().top+window.scrollY-10; window.scrollTo({top:y,behavior:reduce?"auto":"smooth"}); links.forEach(l=>l.classList.toggle("on",l===a)); }));
+  const ro=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){links.forEach(l=>l.classList.toggle("on",l.dataset.k===en.target.id));} }),{rootMargin:"-45% 0px -50% 0px"});
+  secs.forEach(s=>s&&ro.observe(s));
+  // copy address
+  const cb=document.getElementById("copy");
+  cb.addEventListener("click",()=>{ const t="서울 종로구 대학로 57 홍익대학교 대학로 아트센터"; const done=()=>{cb.textContent="복사했어요";setTimeout(()=>cb.textContent="주소 복사",1800);};
+    if(navigator.clipboard) navigator.clipboard.writeText(t).then(done).catch(()=>{cb.textContent=t;}); else cb.textContent=t; });
+})();
+</script>
+
+</body>
+</html>
