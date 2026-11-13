@@ -837,6 +837,7 @@ async function capture(scr) {
   $('video', vf).hidden = true; $('.ov', vf).hidden = true;
   const img = new Image(); img.src = url; img.alt = '촬영한 인증샷'; img.className = 'shot'; vf.appendChild(img);
   scr._shot = url;
+  S.photo = url; uploadPhoto();
   $('.keys', scr).hidden = true; $('.keys2', scr).hidden = false;
   $('.term', scr).innerHTML = '<div class="ok">&gt; 인증샷 촬영 완료</div><div class="cur">&gt; 이 사진으로 진행할까요?</div>';
 }
@@ -850,7 +851,7 @@ function retake(scr) {
   beep(600, .05); startCam(scr);
 }
 async function verify(scr) {
-  S.verified = true; S.photo = scr._shot; uploadPhoto();
+  S.verified = true;
   const vf = $('.vf .in', scr);
   const g = document.createElement('div'); g.className = 'grid2'; vf.appendChild(g);
   $('.keys2', scr).hidden = true;
@@ -865,16 +866,18 @@ async function verify(scr) {
 function uploadPhoto() {
   if (!S.photo) return;
   if (!ENDPOINT) { S.photoState = 'off'; return; }
-  const mine = S; mine.photoState = 'up';
-  const body = JSON.stringify({ type: 'photo', file: mine.file, agent: mine.agent, image: mine.photo.split(',')[1] });
+  const mine = S, shot = mine.photo; mine.photoState = 'up';
+  const body = JSON.stringify({ type: 'photo', file: mine.file, agent: mine.agent, image: shot.split(',')[1] });
   const attempt = async (left) => {
     try {
       const r = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body });
       const j = await r.json();
       if (!j.ok || !j.id) throw new Error(j.error || 'upload');
+      if (mine.photo !== shot) return; // 다시 찍은 경우: 이 사진은 드라이브에만 남김
       mine.photoId = j.id; mine.photoState = 'ok';
     } catch (e) {
       if (left > 0) { await sleep(2500); return attempt(left - 1); }
+      if (mine.photo !== shot) return;
       mine.photoState = 'fail';
     }
     if (mine === S && curId === 'success') renderQR(current);
