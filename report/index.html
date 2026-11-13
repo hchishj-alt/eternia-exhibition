@@ -517,6 +517,10 @@ textarea,input{font:inherit;color:inherit}
 .fsbtn{position:fixed;z-index:80;right:max(16px, env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--lime);color:var(--ink);font-family:var(--f-kr);font-weight:800;font-size:15px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);box-shadow:0 6px 20px #0006}
 .fsbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.4}
 .fsbtn:active{transform:scale(.96)}
+.qrfloat{position:absolute;right:5%;bottom:18%;width:36%;z-index:7;padding:calc(26 * var(--u)) calc(20 * var(--u));box-shadow:0 0 0 calc(4 * var(--u)) var(--lime);animation:rise .5s var(--ease) both}
+.qrfloat .qr{width:84%;margin-top:calc(16 * var(--u));padding:calc(14 * var(--u))}
+.qrfloat strong{font-size:calc(22 * var(--u));margin-top:calc(16 * var(--u))}
+.qrfloat small{font-size:calc(18 * var(--u))}
 /* ---------- TRANSFER (uplink) ---------- */
 .xfer{display:flex;align-items:center;width:100%;margin-top:calc(80 * var(--u));gap:calc(20 * var(--u))}
 .xfer .node{flex:none;display:flex;flex-direction:column;align-items:center;gap:calc(16 * var(--u))}
@@ -839,11 +843,12 @@ async function capture(scr) {
   scr._shot = url;
   S.photo = url; uploadPhoto();
   $('.keys', scr).hidden = true; $('.keys2', scr).hidden = false;
-  $('.term', scr).innerHTML = '<div class="ok">&gt; 인증샷 촬영 완료</div><div class="cur">&gt; 이 사진으로 진행할까요?</div>';
+  $('.qrfloat', scr).hidden = false; renderQR(scr);
+  $('.term', scr).innerHTML = '<div class="ok">&gt; 인증샷 촬영 완료 · QR을 찍으면 바로 저장돼요</div><div class="cur">&gt; 이 사진으로 진행할까요?</div>';
 }
 function retake(scr) {
   const vf = $('.vf .in', scr);
-  $('.shot', vf)?.remove(); scr._shot = null;
+  $('.shot', vf)?.remove(); scr._shot = null; $('.qrfloat', scr).hidden = true;
   $('video', vf).hidden = false; $('.ov', vf).hidden = false;
   $('.keys', scr).hidden = false; $('.keys2', scr).hidden = true;
   $$('[data-flip],[data-skip]', scr).forEach(b => b.disabled = false);
@@ -880,7 +885,7 @@ function uploadPhoto() {
       if (mine.photo !== shot) return;
       mine.photoState = 'fail';
     }
-    if (mine === S && curId === 'success') renderQR(current);
+    if (mine === S && (curId === 'success' || curId === 'access')) renderQR(current);
   };
   attempt(2);
 }
@@ -914,6 +919,7 @@ BUILD.access = () => screen(`
       <canvas class="ov" width="1080" height="1350" aria-hidden="true"></canvas>
       <div class="cd" hidden><span class="ring"></span><b>3</b><small>LOOK HERE</small></div>
       <div class="msg">카메라 연결 중…</div>
+      <div class="qrbox qrfloat" hidden></div>
     </div></div>
     <div class="keys rise" style="--d:3">
       <button class="key sbox ch-tr" data-flip aria-label="카메라 전환"><svg viewBox="0 0 24 24"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/></svg><small class="fl">${S.facing === 'user' ? 'REAR' : 'SELFIE'}</small></button>
