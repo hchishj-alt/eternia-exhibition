@@ -783,7 +783,11 @@ function prev() { let i = idx() - 1; while (i > 0 && ['log1', 'transmit', 'sendi
 
 // ====== CAMERA · 버튼 → 3·2·1 카운트다운 → 촬영 (상시 비치용: 제한시간 없음) ======
 let stream = null, countTimer = null;
-const LOGO_IMG = new Image(); LOGO_IMG.src = '../assets/eternia-logo.webp';
+const LOGO_IMG = new Image();
+// 로고가 다 불러와진 뒤에 프레임을 그림 (아이패드 사파리에서 로딩 전에 그려져 빠지던 문제)
+const logoReady = new Promise(res => { LOGO_IMG.onload = res; LOGO_IMG.onerror = () => { if (!LOGO_IMG.src.includes('.png')) LOGO_IMG.src = '../assets/eternia-logo.png'; else res(); }; });
+LOGO_IMG.src = '../assets/eternia-logo.png';
+const logoWait = () => Promise.race([logoReady, sleep(4000)]);
 const frameMeta = () => ({ agent: S.agent, file: S.file, date: today() });
 function stopCam() {
   if (countTimer) { clearInterval(countTimer); countTimer = null; }
@@ -792,7 +796,7 @@ function stopCam() {
 function stopStream() { if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; } }
 async function fontsReady() { try { await Promise.all(['700', '800', '900'].map(w => document.fonts.load(`${w} 20px Orbitron`))); } catch (e) {} }
 async function paintOverlay(scr) {
-  await fontsReady();
+  await Promise.all([fontsReady(), logoWait()]);
   const ov = $('.ov', scr); if (!ov) return;
   ETF.draw(ov.getContext('2d'), null, LOGO_IMG, frameMeta());
 }
@@ -830,7 +834,7 @@ function countdown(scr) {
 async function capture(scr) {
   const v = $('video', scr);
   if (!v.videoWidth) return;
-  await fontsReady();
+  await Promise.all([fontsReady(), logoWait()]);
   const c = document.createElement('canvas'); c.width = ETF.W; c.height = ETF.H;
   ETF.draw(c.getContext('2d'), v, LOGO_IMG, frameMeta(), { mirror: S.facing === 'user' });
   const url = c.toDataURL('image/jpeg', .9);
