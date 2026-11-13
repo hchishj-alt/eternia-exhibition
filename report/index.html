@@ -608,7 +608,7 @@ textarea,input{font:inherit;color:inherit}
 <script src="photo-frame.js"></script>
 <script>
 /* ▼ 구글 Apps Script 웹앱 URL (응답 → 구글 시트, 인증샷 → 구글 드라이브). 설정법: report/README_사진QR설정.md */
-window.HB_ENDPOINT = "";
+window.HB_ENDPOINT = "https://script.google.com/macros/s/AKfycbxnwztBHio_WtYqoqGO_pavmG-NgLl2e8eTE1OeoLfJ2ZPHp4G7Mq3Vi354Vy8sp_Ll/exec";
 </script>
 <script>/* HEXABLOOM 임무 보고서 — web build of the Figma mockup */
 (() => {
@@ -1427,7 +1427,10 @@ const fsBtn = $('#fsbtn'), de = document.documentElement;
 const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
 const fsCan = !!(de.requestFullscreen || de.webkitRequestFullscreen);
 const fsSync = () => { fsBtn.hidden = !fsCan || fsOn(); };
-fsBtn.onclick = async () => { try { await (de.requestFullscreen ? de.requestFullscreen({ navigationUI: 'hide' }) : de.webkitRequestFullscreen()); } catch (e) { toast('전체화면을 열 수 없어요. F11을 눌러 주세요'); } fsSync(); };
+const goFull = async quiet => { if (!fsCan || fsOn()) return; try { await (de.requestFullscreen ? de.requestFullscreen({ navigationUI: 'hide' }) : de.webkitRequestFullscreen()); } catch (e) { if (!quiet) toast('전체화면을 열 수 없어요. F11을 눌러 주세요'); } fsSync(); };
+fsBtn.onclick = e => { e.stopPropagation(); goFull(false); };
+// 상시 비치용: 화면 어디든 터치하면 자동으로 전체화면 (브라우저 정책상 첫 터치는 필요)
+document.addEventListener('pointerdown', () => goFull(true), true);
 document.addEventListener('fullscreenchange', fsSync); document.addEventListener('webkitfullscreenchange', fsSync);
 fsSync();
 
