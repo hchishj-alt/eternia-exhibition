@@ -514,6 +514,9 @@ textarea,input{font:inherit;color:inherit}
 .qrbox .retry{margin-top:calc(20 * var(--u));background:var(--lime);color:var(--ink);font-weight:800;font-size:calc(26 * var(--u));padding:calc(16 * var(--u)) calc(40 * var(--u))}
 
 
+.fsbtn{position:fixed;z-index:80;right:max(16px, env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--lime);color:var(--ink);font-family:var(--f-kr);font-weight:800;font-size:15px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);box-shadow:0 6px 20px #0006}
+.fsbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.4}
+.fsbtn:active{transform:scale(.96)}
 /* ---------- TRANSFER (uplink) ---------- */
 .xfer{display:flex;align-items:center;width:100%;margin-top:calc(80 * var(--u));gap:calc(20 * var(--u))}
 .xfer .node{flex:none;display:flex;flex-direction:column;align-items:center;gap:calc(16 * var(--u))}
@@ -596,6 +599,7 @@ textarea,input{font:inherit;color:inherit}
 .tb .brand small{margin-top:calc(12 * var(--u))}
 </style>
 <div class="app" id="app"></div>
+<button class="fsbtn" id="fsbtn" hidden aria-label="전체화면"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>전체화면</button>
 <script src="qrcode.js"></script>
 <script src="photo-frame.js"></script>
 <script>
@@ -1408,6 +1412,15 @@ function admin() {
   const clr = $('[data-clear]', el); let arm = false;
   clr.onclick = () => { if (!arm) { arm = true; clr.textContent = '한 번 더 누르면 삭제돼요'; return; } LS.set('hb_all', []); el.remove(); toast('기기 기록을 비웠어요'); go('access'); };
 }
+
+// ---- 전체화면 (크롬/키오스크) ----
+const fsBtn = $('#fsbtn'), de = document.documentElement;
+const fsOn = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+const fsCan = !!(de.requestFullscreen || de.webkitRequestFullscreen);
+const fsSync = () => { fsBtn.hidden = !fsCan || fsOn(); };
+fsBtn.onclick = async () => { try { await (de.requestFullscreen ? de.requestFullscreen({ navigationUI: 'hide' }) : de.webkitRequestFullscreen()); } catch (e) { toast('전체화면을 열 수 없어요. F11을 눌러 주세요'); } fsSync(); };
+document.addEventListener('fullscreenchange', fsSync); document.addEventListener('webkitfullscreenchange', fsSync);
+fsSync();
 
 flush();
 addEventListener('online', flush);
