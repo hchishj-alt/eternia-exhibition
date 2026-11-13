@@ -65,7 +65,13 @@
     x.beginPath(); x.moveTo(44, H - 300); x.lineTo(44, H - 200); x.lineTo(300, H - 200); x.lineTo(340, H - 160); x.lineTo(W - 340, H - 160); x.lineTo(W - 300, H - 200); x.lineTo(W - 44, H - 200); x.lineTo(W - 44, H - 300); x.stroke();
     x.restore();
     txt(x, 'HEXABLOOM · MISSION REPORT', W / 2, 30, 20, '#fff', 'center', 800);
-    if (logo && logo.width) { const lh = 110, lw = logo.width * lh / logo.height; x.drawImage(logo, W / 2 - lw / 2, H - 140, lw, lh); }
+    if (logo && logo.width) {
+      // 로고 PNG의 투명 여백을 잘라내고(글자 영역만) 가운데 패널(380~700, H-160~H) 정중앙에 배치
+      const nw = logo.naturalWidth || logo.width, nh = logo.naturalHeight || logo.height;
+      const sx = nw * 51 / 446, sy = nh * 14 / 188, sw = nw * 339 / 446, sh = nh * 122 / 188;
+      const lh = 84, lw = sw * lh / sh;
+      x.drawImage(logo, sx, sy, sw, sh, W / 2 - lw / 2, H - 86 - lh / 2, lw, lh);
+    }
     txt(x, 'AGENT', 70, H - 156, 13, '#6c707a', 'left', 800);
     txt(x, meta.agent, 70, H - 120, 22, LIME, 'left', 900);
     txt(x, meta.file, 70, H - 84, 15, '#9A9EA7', 'left', 700);
