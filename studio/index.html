@@ -31,9 +31,8 @@ header{padding-block:8px;border-bottom:1px solid var(--line);background:var(--pa
 .info input[type=text]{width:150px}
 .chip{background:var(--lime);color:var(--ink);font-weight:900;font-size:12px;padding:2px 8px;border-radius:3px}
 .link{background:none;border:0;color:var(--warn);font-size:13px;padding:0;text-decoration:underline}
-#stage{position:relative;flex:1;min-height:0;display:grid;place-items:center;transition:background .2s}
+#stage{position:relative;flex:1;min-height:0;display:grid;place-items:center;transition:background .2s;box-sizing:border-box;overflow:hidden}
 #frame{position:relative;width:100%;height:100%;overflow:hidden;background:var(--sbg,#070b16);border-radius:6px}
-#stage.shorts #frame{width:auto;aspect-ratio:9/16;max-width:100%}
 #frame::before,#frame::after{content:"";position:absolute;left:0;right:0;height:18%;z-index:2;pointer-events:none}
 #frame::before{top:0;background:linear-gradient(var(--sbg,#070b16),transparent)}
 #frame::after{bottom:0;background:linear-gradient(transparent,var(--sbg,#070b16))}
@@ -86,7 +85,8 @@ footer{background:var(--panel);border-top:1px solid var(--line);padding-block:8p
 .tog{display:flex;gap:8px;flex-wrap:wrap}
 #panel select{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;grid-column:2 / 4}
 .tip{font-size:12px;color:var(--dim);line-height:1.5}
-@media (orientation:portrait){#stage.shorts #frame{width:100%;aspect-ratio:auto}}
+@media (max-height:520px){.info{display:none}header{padding-block:4px}.take small{display:none}footer{padding-block:5px}footer .grp,#full,#reset{display:none}}
+#turn{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:13px;color:var(--dim);pointer-events:none}
 @media (max-width:700px){.hint,.brand{display:none}.info span:not(.chip){display:none}.clock{min-width:96px;font-size:20px}.btn{padding:8px 9px;font-size:13px}.go{padding:10px 14px}}
 </style>
 
@@ -98,7 +98,7 @@ footer{background:var(--panel);border-top:1px solid var(--line);padding-block:8p
   <div class="takes" id="takes" role="group" aria-label="대본 목록"></div>
 </header>
 <div class="info wrap" id="info"></div>
-<div id="stage">
+<div id="stage"><div id="turn" hidden>폰을 가로로 돌리면 16:9로 크게 찍혀요</div>
   <div id="frame">
     <video id="cam" hidden autoplay muted playsinline></video><div id="tint"></div><div id="grid" hidden></div><div id="rec" hidden>REC 0:00</div><div id="msg" hidden></div>
     <div id="mark"></div>
@@ -217,7 +217,7 @@ AI는 혼자서는 할 수 없었던 범위까지 제 작업을 넓혀 준 동�
 ];
 const $=id=>document.getElementById(id);
 const store={get(k,d){try{const v=localStorage.getItem('etst_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('etst_'+k,JSON.stringify(v))}catch(e){}}};
-const DEF={mode:'Y',fsY:innerWidth<700?24:44,fsS:innerWidth<700?24:30,lh:1.55,w:80,fg:'#f4f7ff',bg:'#070b16',ta:'left',speed:1,mk:38,cd:3,mir:false,flv:false,beep:false,light:false,lv:14,lt:'#ffffff',dim:.35,grid:false,dev:'',mic:''};
+const DEF={mode:'Y',fsY:Math.min(innerWidth,innerHeight)<700?26:44,fsS:Math.min(innerWidth,innerHeight)<700?24:30,lh:1.55,w:80,fg:'#f4f7ff',bg:'#070b16',ta:'left',speed:1,mk:38,cd:3,mir:false,flv:false,beep:false,light:false,lv:14,lt:'#ffffff',dim:.35,grid:false,dev:'',mic:''};
 let S=Object.assign({},DEF,store.get('S',{}));
 let custom=store.get('custom',[]);
 let cur=0,playing=false,elapsed=0,last=0,raf=0,counting=0,actx=null,stream=null,recd=null,chunks=[],recT0=0,recTimer=0;
@@ -263,7 +263,9 @@ function apply(){
   for(const [id,k] of [['fgS','fg'],['bgS','bg'],['ltS','lt']])[...$(id).children].forEach(b=>{if(b.tagName=='BUTTON')b.setAttribute('aria-pressed',b.dataset.c==S[k]);else b.value=S[k]});
   draw();
 }
-function draw(){
+function fit(){const r=S.mode=='Y'?16/9:9/16,cs=getComputedStyle(stage),pw=stage.clientWidth-parseFloat(cs.paddingLeft)*2,ph=stage.clientHeight-parseFloat(cs.paddingTop)*2;
+  let w=pw,h=w/r;if(h>ph){h=ph;w=h*r}frame.style.width=Math.floor(w)+'px';frame.style.height=Math.floor(h)+'px';$('turn').hidden=!(S.mode=='Y'&&innerHeight>innerWidth&&!S.light)}
+function draw(){fit();
   const top=frame.clientHeight*S.mk/100,h=script.scrollHeight,p=Math.min(elapsed/dur(),1.1);
   script.style.transform=`translateY(${top-p*h}px)`;$('bar').style.width=Math.min(p,1)*100+'%';
   const sec=secOf(T()),c=$('clock');c.innerHTML=`${fmt(elapsed)} <span>/ ${fmt(sec)}</span>`;c.classList.toggle('over',elapsed>sec+2);
@@ -287,7 +289,7 @@ function say(t){const m=$('msg');m.textContent=t;m.hidden=!t;if(t)setTimeout(()=
 async function camOn(){
   camOff();
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){say('이 화면에서는 카메라를 쓸 수 없어요. 내려받은 파일을 크롬에서 열어주세요.');apply();return}
-  const tall=S.mode=='S'&&innerHeight>innerWidth;
+  const tall=innerHeight>innerWidth;
   try{stream=await navigator.mediaDevices.getUserMedia({video:Object.assign({width:{ideal:tall?1080:1920},height:{ideal:tall?1920:1080},frameRate:{ideal:30}},S.dev?{deviceId:{exact:S.dev}}:{facingMode:'user'}),audio:S.mic?{deviceId:{exact:S.mic}}:true})}
   catch(e){stream=null;say(e.name=='NotAllowedError'?'카메라 권한이 막혀 있어요. 주소창 옆 카메라 아이콘에서 허용하거나, 내려받은 파일을 크롬에서 열어주세요.':'카메라를 열지 못했어요: '+e.name);apply();return}
   const v=$('cam');v.srcObject=stream;v.hidden=false;say('');
@@ -348,7 +350,7 @@ addEventListener('keydown',e=>{const a=document.activeElement;if((a===script&&sc
   else if(e.key=='ArrowUp'){e.preventDefault();setSpeed(S.speed+.05)}else if(e.key=='ArrowDown'){e.preventDefault();setSpeed(S.speed-.05)}
   else if(e.key=='ArrowRight')load((cur+1)%takes().length);else if(e.key=='ArrowLeft')load((cur+takes().length-1)%takes().length)
   else if(e.key=='Escape'){panel(false);$('flood').hidden=true}});
-addEventListener('resize',draw);
+let ori=innerHeight>innerWidth;addEventListener('resize',()=>{draw();const o=innerHeight>innerWidth;if(o!=ori){ori=o;if(stream&&!recd)camOn()}});
 document.fonts&&document.fonts.ready.then(draw);
 const wake=()=>{try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}};wake();document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake()});
 load(0);apply();
